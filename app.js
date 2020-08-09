@@ -3,12 +3,12 @@ const url = require('url')
 const app = express()
 const fetch = require('node-fetch')
 const { response } = require('express')
-const port = 3000
+const port = process.env.PORT || 3000
 const API_KEY = '***************************************'
 
 
 app.listen(port, () => {
-	console.log(`lighthouse-stats app listening at http://localhost:${port}`)
+	console.log(`lighthouse-stats app listening at PORT ${port}`)
 })
 
 app.get('/', (req, res) => {
@@ -146,11 +146,11 @@ function guageClass(score) {
 
 function proceed(performance, accessibility, best_practices, seo, pwa, res, categories) {
 	// test
-	performance = 95
-	accessibility = 100
-	best_practices = 76
-	seo = 40
-	pwa = 3
+	// performance = 95
+	// accessibility = 100
+	// best_practices = 76
+	// seo = 40
+	// pwa = 3
 	// prepare svg and send
 	let procedure = ((categories & 1) > 0) + ((categories & 2) > 0) + ((categories & 4) > 0) + ((categories & 8) > 0) + ((categories & 16) > 0)
 	var offset1 = 500 - (procedure * 100)
@@ -234,25 +234,25 @@ function proceed(performance, accessibility, best_practices, seo, pwa, res, cate
 		</style>
 		<svg class="guage-div guage-perf ${(categories & 16) === 16 ? guageClass(performance) : 'guage-invisible'}" viewBox="0 0 200 200" width="200" height="200" x="${offset1}" y="0">
 			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
-			<circle class="gauge-arc guage-arc-1" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${performance * 351.858 / 100}, 351.858;"></circle>
+			<circle class="gauge-arc guage-arc-1" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${performance >= 0 ? performance * 351.858 / 100 : 351.858}, 351.858;"></circle>
 			<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${performance >= 0 ? performance : 'NA'}</text>
 			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Performance</text>
 		</svg>
 		<svg class="guage-div guage-acc ${(categories & 8) === 8 ? guageClass(accessibility) : 'guage-invisible'}" viewBox="0 0 200 200" width="200" height="200" x="${offset2}" y="0">
 			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
-			<circle class="gauge-arc guage-arc-2" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${accessibility * 351.858 / 100}, 351.858;"></circle>
+			<circle class="gauge-arc guage-arc-2" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${accessibility >= 0 ? accessibility * 351.858 / 100 : 351.858}, 351.858;"></circle>
 			<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${accessibility >= 0 ? accessibility : 'NA'}</text>
 			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Accessibility</text>
 		</svg>
 		<svg class="guage-div guage-best ${(categories & 4) === 4 ? guageClass(best_practices) : 'guage-invisible'}" viewBox="0 0 200 200" width="200" height="200" x="${offset3}" y="0">
 			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
-			<circle class="gauge-arc guage-arc-3" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${best_practices * 351.858 / 100}, 351.858;"></circle>
+			<circle class="gauge-arc guage-arc-3" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${best_practices >= 0 ? best_practices * 351.858 / 100 : 351.858}, 351.858;"></circle>
 			<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${best_practices >= 0 ? best_practices : 'NA'}</text>
 			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Best Practices</text>
 		</svg>
 		<svg class="guage-div guage-seo ${(categories & 2) === 2 ? guageClass(seo) : 'guage-invisible'}" viewBox="0 0 200 200" width="200" height="200" x="${offset4}" y="0">
 			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
-			<circle class="gauge-arc guage-arc-4" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${seo * 351.858 / 100}, 351.858;"></circle>
+			<circle class="gauge-arc guage-arc-4" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${seo >= 0 ? seo * 351.858 / 100 : 351.858}, 351.858;"></circle>
 			<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${seo >= 0 ? seo : 'NA'}</text>
 			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">SEO</text>
 		</svg>

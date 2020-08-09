@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" width="1000" height="200">
+	<style>
+			.gauge-base {
+				opacity: 0.1
+			}
+
+			.gauge-arc {
+				fill: none;
+				animation-delay: 250ms;
+				stroke-linecap: round;
+				transform: rotate(-90deg);
+				transform-origin: 100px 60px;
+				animation: load-gauge 1s ease forwards
+			}
+
+			.guage-text {
+				font-size: 40px;
+				font-family: monospace;
+				text-align: center
+			}
+
+			.guage-red {
+				color: #ff4e42;
+				fill: #ff4e42;
+				stroke: #ff4e42
+			}
+			.guage-orange {
+				color: #ffa400;
+				fill: #ffa400;
+				stroke: #ffa400
+			}
+			.guage-green {
+				color: #0cce6b;
+				fill: #0cce6b;
+				stroke: #0cce6b
+			}
+			.guage-undefined {
+				color: #1e1e1e;
+				fill: #1e1e1e;
+				stroke: #1e1e1e
+			}
+
+			.guage-title {
+				color: #212121;
+				fill: #212121;
+				stroke: none;
+				font-size: 26px;
+				line-height: 26px;
+				font-family: Roboto, Halvetica, Arial, sans-serif
+			}
+
+			@keyframes load-gauge {
+				from {
+					stroke-dasharray: 0 352.858
+				}
+			}
+			.lh-gauge--pwa__disc {
+				fill: #e0e0e0
+			}
+			.lh-gauge--pwa__logo {
+				position: relative;
+				fill: #b0b0b0
+			}
+			.lh-gauge--pwa__invisible {
+				display: none
+			}
+			.lh-gauge--pwa__visible {
+				display: inline
+			}
+			.guage-invisible {
+				display: none
+			}
+	</style>
+	<svg class="guage-div guage-perf guage-green" viewBox="0 0 200 200" width="200" height="200" x="100" y="0">
+		<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
+		<circle class="gauge-arc guage-arc-1" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: 334.2651, 351.858;"></circle>
+		<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle"></text>
+		<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Fast</text>
+	</svg>
+	<svg class="guage-div guage-acc guage-orange" viewBox="0 0 200 200" width="200" height="200" x="300" y="0">
+		<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
+		<circle class="gauge-arc guage-arc-2" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: 263.89349999999996, 351.858;"></circle>
+		<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle"></text>
+		<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Average</text>
+	</svg>
+	<svg class="guage-div guage-best guage-red" viewBox="0 0 200 200" width="200" height="200" x="500" y="0">
+		<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
+		<circle class="gauge-arc guage-arc-3" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: 168.89184, 351.858;"></circle>
+		<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle"></text>
+		<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Slow</text>
+	</svg>
+	<svg class="guage-div guage-seo guage-undefined" viewBox="0 0 200 200" width="200" height="200" x="700" y="0">
+		<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
+		<circle class="gauge-arc guage-arc-4" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: 351.858, 351.858;"></circle>
+		<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">NA</text>
+		<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Error</text>
+	</svg>
+</svg>
