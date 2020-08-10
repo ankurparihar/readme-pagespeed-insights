@@ -24,6 +24,13 @@ PageSpeed Insights analyzes the content of a web page, then generates suggestion
 	<img width="800px" src="./assets/pwa.svg">
 </p>
 
+### Dark theme
+<p align="center">
+	<img width="800px" src="./assets/banner-dark.svg">
+</p>
+
+_Note:_ Black background for demonstration purpose only! Actual background is transparent.
+
 
 ## API and Usage
 
@@ -44,6 +51,12 @@ https://pagespeed-insights.herokuapp.com?url=your_website_url
 For example
 ```md
 https://pagespeed-insights.herokuapp.com?url=https://ankurparihar.github.io
+```
+
+### Theme
+Two themes are supported `light` and `dark`. `light` theme is default
+```md
+https://pagespeed-insights.herokuapp.com?url=your_website_url&theme=dark
 ```
 
 ### Strategy

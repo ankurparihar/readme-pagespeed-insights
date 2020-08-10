@@ -1,5 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg"
-	xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" width="1200" height="200">
+<svg class="theme--light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" width="1200" height="200">
 	<style>
 		.gauge-base {
 			opacity: 0.1
@@ -36,13 +35,20 @@
 			stroke: #0cce6b
 		}
 
-		.guage-title {
-			color: #212121;
-			fill: #212121;
+ 		.guage-title {
 			stroke: none;
 			font-size: 26px;
 			line-height: 26px;
 			font-family: Roboto, Halvetica, Arial, sans-serif
+		}
+
+		.theme--light .guage-title {
+			color: #212121;
+			fill: #212121
+		}
+		.theme--dark .guage-title {
+			color: #f5f5f5;
+			fill: #f5f5f5
 		}
 
 		@keyframes load-gauge {
@@ -50,8 +56,11 @@
 				stroke-dasharray: 0 352.858
 			}
 		}
-		.lh-gauge--pwa__disc {
+		.theme--light .lh-gauge--pwa__disc {
 			fill: #e0e0e0
+		}
+		.theme--dark .lh-gauge--pwa__disc {
+			fill: #424242
 		}
 		.lh-gauge--pwa__logo {
 			position: relative;
@@ -63,11 +72,17 @@
 		.lh-gauge--pwa__visible {
 			display: inline
 		}
-		.lh-gauge--pwa__logo--primary-color {
+		.theme--light .lh-gauge--pwa__logo--primary-color {
 			fill: #304ffe
 		}
-		.lh-gauge--pwa__logo--secondary-color {
+		.theme--dark .lh-gauge--pwa__logo--primary-color {
+			fill: #304ffe
+		}
+		.theme--light .lh-gauge--pwa__logo--secondary-color {
 			fill: #3d3d3d
+		}
+		.theme--dark .lh-gauge--pwa__logo--secondary-color {
+			fill: #d8b6b6
 		}
 	</style>
 	<svg class="guage-div guage-pwa" viewBox="0 0 200 200" width="200" height="200" x="0" y="0">
