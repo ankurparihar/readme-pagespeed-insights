@@ -99,22 +99,24 @@ app.get('/', (req, res) => {
 				var optimized_total = 0
 				lighthouseResult.categories.pwa.auditRefs.forEach(auditRef => {
 					var audit = lighthouseResult.audits[auditRef.id]
-					if (auditRef.group === 'pwa-fast-reliable') {
-						fast_reliable_total++
-						if ((audit) && (audit.score >= 0.9)) {
-							fast_reliable++
+					if (audit.scoreDisplayMode === 'binary' || audit.scoreDisplayMode === 'numeric') {
+						if (auditRef.group === 'pwa-fast-reliable') {
+							fast_reliable_total++
+							if ((audit) && (audit.score >= 0.9)) {
+								fast_reliable++
+							}
 						}
-					}
-					else if (auditRef.group === 'pwa-installable') {
-						installable_total++
-						if ((audit) && (audit.score >= 0.9)) {
-							installable++
+						else if (auditRef.group === 'pwa-installable') {
+							installable_total++
+							if ((audit) && (audit.score >= 0.9)) {
+								installable++
+							}
 						}
-					}
-					else if (auditRef.group === 'pwa-optimized') {
-						optimized_total++
-						if ((audit) && (audit.score >= 0.9)) {
-							optimized++
+						else if (auditRef.group === 'pwa-optimized') {
+							optimized_total++
+							if ((audit) && (audit.score >= 0.9)) {
+								optimized++
+							}
 						}
 					}
 				})
@@ -231,6 +233,12 @@ function proceed(performance, accessibility, best_practices, seo, pwa, res, cate
 			.guage-invisible {
 				display: none
 			}
+			.lh-gauge--pwa__logo--primary-color {
+				fill: #304ffe
+			}
+			.lh-gauge--pwa__logo--secondary-color {
+				fill: #3d3d3d
+			}
 		</style>
 		<svg class="guage-div guage-perf ${(categories & 16) === 16 ? guageClass(performance) : 'guage-invisible'}" viewBox="0 0 200 200" width="200" height="200" x="${offset1}" y="0">
 			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
@@ -285,9 +293,9 @@ function proceed(performance, accessibility, best_practices, seo, pwa, res, cate
 					<!-- Background and PWA logo (color by default) -->
 					<circle class="lh-gauge--pwa__disc" cx="30" cy="30" r="30"></circle>
 					<g class="lh-gauge--pwa__logo">
-						<path d="M35.66 19.39l.7-1.75h2L37.4 15 38.6 12l3.4 9h-2.51l-.58-1.61z"></path>
-						<path d="M33.52 21l3.65-9h-2.42l-2.5 5.82L30.5 12h-1.86l-1.9 5.82-1.35-2.65-1.21 3.72L25.4 21h2.38l1.72-5.2 1.64 5.2z"></path>
-						<path fill-rule="nonzero" d="M20.3 17.91h1.48c.45 0 .85-.05 1.2-.15l.39-1.18 1.07-3.3a2.64 2.64 0 0 0-.28-.37c-.55-.6-1.36-.91-2.42-.91H18v9h2.3V17.9zm1.96-3.84c.22.22.33.5.33.87 0 .36-.1.65-.29.87-.2.23-.59.35-1.15.35h-.86v-2.41h.87c.52 0 .89.1 1.1.32z"></path>
+						<path ${pwa === 7 ? 'class="lh-gauge--pwa__logo--secondary-color"' : ''} d="M35.66 19.39l.7-1.75h2L37.4 15 38.6 12l3.4 9h-2.51l-.58-1.61z"></path>
+						<path ${pwa === 7 ? 'class="lh-gauge--pwa__logo--primary-color"' : ''} d="M33.52 21l3.65-9h-2.42l-2.5 5.82L30.5 12h-1.86l-1.9 5.82-1.35-2.65-1.21 3.72L25.4 21h2.38l1.72-5.2 1.64 5.2z"></path>
+						<path ${pwa === 7 ? 'class="lh-gauge--pwa__logo--secondary-color"' : ''} fill-rule="nonzero" d="M20.3 17.91h1.48c.45 0 .85-.05 1.2-.15l.39-1.18 1.07-3.3a2.64 2.64 0 0 0-.28-.37c-.55-.6-1.36-.91-2.42-.91H18v9h2.3V17.9zm1.96-3.84c.22.22.33.5.33.87 0 .36-.1.65-.29.87-.2.23-.59.35-1.15.35h-.86v-2.41h.87c.52 0 .89.1 1.1.32z"></path>
 					</g>
 					<!-- No badges. -->
 					<rect class="lh-gauge--pwa__component lh-gauge--pwa__na-line ${pwa === 0 ? 'lh-gauge--pwa__visible' : 'lh-gauge--pwa__invisible'}" fill="#FFFFFF" x="20" y="32" width="20" height="4" rx="2"></rect>
