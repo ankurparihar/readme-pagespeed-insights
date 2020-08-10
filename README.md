@@ -28,7 +28,10 @@ PageSpeed Insights analyzes the content of a web page, then generates suggestion
 ## API and Usage
 
 __Important note: Do not embed url to readme, instead embed generated svg__
-It takes time to perform audits of website. So embedding it directly in readme would not render due to server timeout. Instead you must first visit and download the svg from the api (by simply visiting api url with desired parameters). And then embedding that svg to your README files.
+- It takes time to perform audits of website. So embedding it directly in readme would not render due to server timeout. Instead you must first visit and download the svg from the api (by simply visiting api url with desired parameters). And then embed that svg to your README files.
+- Typically it takes 10-15 seconds to obtain the results from pagespeed api
+- Some servers don't allow (eg. google.com) or delay (eg. cloudflare) pagespeed crawler, so it may result in unexpected results.
+- The result may fluctuate slightly sometimes.
 
 ### API url
 The api is called from `https://pagespeed-insights.herokuapp.com`
@@ -56,6 +59,7 @@ There are 5 categories (in order)
 - Best Practices
 - SEO
 - Progressive Web App
+
 By default all the categories are evaluated, but you can specify which categories to evaluate. The category parameter is a number. This is 5-bit number in binary, where if a bit is 1 then the corresponding category will be included.
 For example 
 ```
@@ -70,11 +74,14 @@ For example
 After downloading svg you can embed into readme as following
 - markdown method
 ```
-![alt text](path/to/svg "logo text")
+![alt text](path/to/svg "tooltip text")
 ```
 - html method
 ```html
 <p align="center">	<!-- (optional) center align -->
-	<img src="/path/to/svg" width="XXXpx">
+    <img src="/path/to/svg" width="XXXpx">
 </p>
 ```
+
+### Example
+- [ankurparihar.github.io](https://github.com/ankurparihar/ankurparihar.github.io#readme)
