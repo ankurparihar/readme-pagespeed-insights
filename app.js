@@ -220,6 +220,9 @@ function proceed(performance, accessibility, best_practices, seo, pwa, res, cate
 				line-height: 26px;
 				font-family: Roboto, Halvetica, Arial, sans-serif
 			}
+			.metric.guage-title {
+				font-family: 'Courier New', Courier, monospace
+			}
 			.theme--agnostic .guage-title {
 				color: #737373;
 				fill: #737373
@@ -382,10 +385,10 @@ function proceed(performance, accessibility, best_practices, seo, pwa, res, cate
 				<rect fill-opacity="0" stroke-width="2" rx="40" id="svg_2" height="72" width="600" y="1" x="0" fill="#000000"/>
 				<rect stroke="#000" rx="8" id="svg_3" height="14" width="48" y="30" x="35" stroke-opacity="null" stroke-width="0" fill="#ff4e42"/>
 				<rect stroke="#000" rx="6" id="svg_4" height="14" width="48" y="30" x="220" stroke-opacity="null" stroke-width="0" fill="#ffa400"/>
-				<rect stroke="#000" rx="6" id="svg_5" height="14" width="48" y="30" x="420" stroke-opacity="null" stroke-width="0" fill="#0cce6b"/>
-				<text class="guage-title" xml:space="preserve" text-anchor="start" font-family="'Courier New', Courier, monospace" font-size="26" id="svg_6" y="45" x="100" stroke-opacity="null" stroke-width="0" stroke="#000">0-49</text>
-				<text class="guage-title" xml:space="preserve" text-anchor="start" font-family="'Courier New', Courier, monospace" font-size="26" id="svg_7" y="45" x="280" stroke-opacity="null" stroke-width="0" stroke="#000">50-89</text>
-				<text class="guage-title" xml:space="preserve" text-anchor="start" font-family="'Courier New', Courier, monospace" font-size="26" id="svg_8" y="45" x="480" stroke-opacity="null" stroke-width="0" stroke="#000">90-100</text>
+				<rect stroke="#000" rx="6" id="svg_5" height="14" width="48" y="30" x="410" stroke-opacity="null" stroke-width="0" fill="#0cce6b"/>
+				<text class="metric guage-title" xml:space="preserve" text-anchor="start" font-size="26" id="svg_6" y="45" x="100" stroke-opacity="null" stroke-width="0" stroke="#000">0-49</text>
+				<text class="metric guage-title" xml:space="preserve" text-anchor="start" font-size="26" id="svg_7" y="45" x="280" stroke-opacity="null" stroke-width="0" stroke="#000">50-89</text>
+				<text class="metric guage-title" xml:space="preserve" text-anchor="start" font-size="26" id="svg_8" y="45" x="470" stroke-opacity="null" stroke-width="0" stroke="#000">90-100</text>
 			</g>
 		</svg>
 	</svg>`
