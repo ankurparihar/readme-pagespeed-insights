@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 	const queryObject = url.parse(req.url, true).query
 	let strategy = queryObject.strategy || 'desktop'
 	let categories = queryObject.categories || 31
-	let theme = queryObject.theme || 'light'
+	let theme = queryObject.theme || 'agnostic'
 	let procedure = ((categories & 1) > 0) + ((categories & 2) > 0) + ((categories & 4) > 0) + ((categories & 8) > 0) + ((categories & 16) > 0)
 	const pagespeedQueryURL = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${queryObject.url}&key=${API_KEY}&strategy=${strategy}&`
 
@@ -198,10 +198,20 @@ function proceed(performance, accessibility, best_practices, seo, pwa, res, cate
 				fill: #0cce6b;
 				stroke: #0cce6b
 			}
-			.guage-undefined {
+			.theme--agnostic .guage-undefined {
+				color: #5c5c5c;
+				fill: #5c5c5c;
+				stroke: #5c5c5c
+			}
+			.theme--light .guage-undefined {
 				color: #1e1e1e;
 				fill: #1e1e1e;
 				stroke: #1e1e1e
+			}
+			.theme--dark .guage-undefined {
+				color: #f5f5f5;
+				fill: #f5f5f5;
+				stroke: #f5f5f5
 			}
 
 			.guage-title {
@@ -209,6 +219,10 @@ function proceed(performance, accessibility, best_practices, seo, pwa, res, cate
 				font-size: 26px;
 				line-height: 26px;
 				font-family: Roboto, Halvetica, Arial, sans-serif
+			}
+			.theme--agnostic .guage-title {
+				color: #737373;
+				fill: #737373
 			}
 			.theme--light .guage-title {
 				color: #212121;
@@ -224,11 +238,8 @@ function proceed(performance, accessibility, best_practices, seo, pwa, res, cate
 					stroke-dasharray: 0 352.858
 				}
 			}
-			.theme--light .lh-gauge--pwa__disc {
+			.lh-gauge--pwa__disc {
 				fill: #e0e0e0
-			}
-			.theme--dark .lh-gauge--pwa__disc {
-				fill: #424242
 			}
 			.lh-gauge--pwa__logo {
 				position: relative;
@@ -243,11 +254,11 @@ function proceed(performance, accessibility, best_practices, seo, pwa, res, cate
 			.guage-invisible {
 				display: none
 			}
-			.theme--light .lh-gauge--pwa__logo--primary-color {
+			.lh-gauge--pwa__logo--primary-color {
 				fill: #304ffe
 			}
-			.theme--dark .lh-gauge--pwa__logo--primary-color {
-				fill: #304ffe
+			.theme--agnostic .lh-gauge--pwa__logo--secondary-color {
+				fill: #787878
 			}
 			.theme--light .lh-gauge--pwa__logo--secondary-color {
 				fill: #3d3d3d
@@ -258,8 +269,14 @@ function proceed(performance, accessibility, best_practices, seo, pwa, res, cate
 			.theme--light #svg_2 {
 				stroke: #00000022
 			}
+			.theme--agnostic #svg_2 {
+				stroke: #616161
+			}
+			.theme--light #svg_2 {
+				stroke: #00000022
+			}
 			.theme--dark #svg_2 {
-				stroke: #f5f5f522
+				stroke: #f5f5f566
 			}
 		</style>
 		<svg class="guage-div guage-perf ${(categories & 16) === 16 ? guageClass(performance) : 'guage-invisible'}" viewBox="0 0 200 200" width="200" height="200" x="${offset1}" y="0">
@@ -366,9 +383,9 @@ function proceed(performance, accessibility, best_practices, seo, pwa, res, cate
 				<rect stroke="#000" rx="8" id="svg_3" height="14" width="48" y="30" x="35" stroke-opacity="null" stroke-width="0" fill="#ff4e42"/>
 				<rect stroke="#000" rx="6" id="svg_4" height="14" width="48" y="30" x="220" stroke-opacity="null" stroke-width="0" fill="#ffa400"/>
 				<rect stroke="#000" rx="6" id="svg_5" height="14" width="48" y="30" x="420" stroke-opacity="null" stroke-width="0" fill="#0cce6b"/>
-				<text class="guage-title" xml:space="preserve" text-anchor="start" font-family="'Courier New', Courier, monospace" font-size="26" id="svg_6" y="45" x="100" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">0-49</text>
-				<text class="guage-title" xml:space="preserve" text-anchor="start" font-family="'Courier New', Courier, monospace" font-size="26" id="svg_7" y="45" x="280" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">50-89</text>
-				<text class="guage-title" xml:space="preserve" text-anchor="start" font-family="'Courier New', Courier, monospace" font-size="26" id="svg_8" y="45" x="480" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">90-100</text>
+				<text class="guage-title" xml:space="preserve" text-anchor="start" font-family="'Courier New', Courier, monospace" font-size="26" id="svg_6" y="45" x="100" stroke-opacity="null" stroke-width="0" stroke="#000">0-49</text>
+				<text class="guage-title" xml:space="preserve" text-anchor="start" font-family="'Courier New', Courier, monospace" font-size="26" id="svg_7" y="45" x="280" stroke-opacity="null" stroke-width="0" stroke="#000">50-89</text>
+				<text class="guage-title" xml:space="preserve" text-anchor="start" font-family="'Courier New', Courier, monospace" font-size="26" id="svg_8" y="45" x="480" stroke-opacity="null" stroke-width="0" stroke="#000">90-100</text>
 			</g>
 		</svg>
 	</svg>`

@@ -1,5 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg"
-	xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" width="1000" height="200">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" width="1000" height="200">
 	<style>
 			.gauge-base {
 				opacity: 0.1
@@ -36,14 +35,14 @@
 				stroke: #0cce6b
 			}
 			.guage-undefined {
-				color: #1e1e1e;
-				fill: #1e1e1e;
-				stroke: #1e1e1e
+				color: #5c5c5c;
+				fill: #5c5c5c;
+				stroke: #5c5c5c
 			}
 
 			.guage-title {
-				color: #212121;
-				fill: #212121;
+				color: #737373;
+				fill: #737373;
 				stroke: none;
 				font-size: 26px;
 				line-height: 26px;
