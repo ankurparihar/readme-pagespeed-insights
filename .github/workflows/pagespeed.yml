@@ -1,15 +1,15 @@
 name: Get Pagespeed results
 on:
-  schedule:
+  # schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '0 0 * * *' # 00:00 UTC
+    # - cron:  '0 0 * * *' # 00:00 UTC
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
   getpsresults:
     env: 
-      WEBSITE: your_website_url
+      HOST: your_website_url
       PSRDESKTOP: pagespeedresultdesktop
       PSRMOBILE: pagespeedresultmobile
       RESULTSFOLDER: reports
@@ -22,8 +22,8 @@ jobs:
     - name: Create local changes
       run: | # Have to be sure a folder is present if not, make it
           mkdir -p $RESULTSFOLDER
-          curl "https://pagespeed-insights.herokuapp.com/?url=$WEBSITE" > ./$RESULTSFOLDER/$PSRDESKTOP.svg
-          curl "https://pagespeed-insights.herokuapp.com/?url=$WEBSITE&strategy=mobile" > ./$RESULTSFOLDER/$PSRMOBILE.svg
+          curl "https://pagespeed-insights.herokuapp.com/?url=${HOST}" > ./$RESULTSFOLDER/$PSRDESKTOP.svg
+          curl "https://pagespeed-insights.herokuapp.com/?url=${HOST}=mobile" > ./$RESULTSFOLDER/$PSRMOBILE.svg
     - name: Commit files 
       run: |
         git add .
