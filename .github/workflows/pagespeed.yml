@@ -22,7 +22,7 @@ jobs:
         fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
     - name: Create local changes
       run: | # Have to be sure a folder is present if not, make it
-          mkdir -p $RESULTSFOLDER
+          mkdir -p ${RESULTSFOLDER}
           curl "${PAGESPEEDURL}/?url=${WEBSITE}" > ./${HOST}/${PSRDESKTOP}.svg
           curl "${PAGESPEEDURL}/?url=${WEBSITE}&strategy=mobile" > ./${HOST}/${PSRMOBILE}.svg
     - name: Commit files 
