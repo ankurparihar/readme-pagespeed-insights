@@ -8,8 +8,9 @@ on:
 
 jobs:
   getpsresults:
-    env: 
+    env:
       HOST: your_website_url
+      PAGESPEEDURL: https://pagespeed-insights.herokuapp.com
       PSRDESKTOP: pagespeedresultdesktop
       PSRMOBILE: pagespeedresultmobile
       RESULTSFOLDER: reports
@@ -22,8 +23,8 @@ jobs:
     - name: Create local changes
       run: | # Have to be sure a folder is present if not, make it
           mkdir -p $RESULTSFOLDER
-          curl "https://pagespeed-insights.herokuapp.com/?url=${HOST}" > ./$RESULTSFOLDER/$PSRDESKTOP.svg
-          curl "https://pagespeed-insights.herokuapp.com/?url=${HOST}=mobile" > ./$RESULTSFOLDER/$PSRMOBILE.svg
+          curl "${PAGESPEEDURL}/?url=${WEBSITE}" > ./${HOST}/${PSRDESKTOP}.svg
+          curl "${PAGESPEEDURL}/?url=${WEBSITE}&strategy=mobile" > ./${HOST}/${PSRMOBILE}.svg
     - name: Commit files 
       run: |
         git add .
