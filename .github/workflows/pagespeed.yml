@@ -10,9 +10,9 @@ jobs:
   getpsresults:
     env:
       HOST: your_website_url
-      PAGESPEEDURL: https://pagespeed-insights.herokuapp.com
-      PSRDESKTOP: pagespeedresultdesktop
-      PSRMOBILE: pagespeedresultmobile
+      PSURL: https://pagespeed-insights.herokuapp.com
+      PSRDESKTOP: psresultdesktop
+      PSRMOBILE: psresultmobile
       RESULTSFOLDER: reports
     runs-on: ubuntu-latest
     steps:
@@ -23,12 +23,12 @@ jobs:
     - name: Create local changes
       run: | # Have to be sure a folder is present if not, make it
           mkdir -p ${RESULTSFOLDER}
-          curl "${PAGESPEEDURL}/?url=${WEBSITE}" > ./${HOST}/${PSRDESKTOP}.svg
-          curl "${PAGESPEEDURL}/?url=${WEBSITE}&strategy=mobile" > ./${HOST}/${PSRMOBILE}.svg
+          curl "${PSURL}/?url=${HOST}" > ./${RESULTSFOLDER}/${PSRDESKTOP}.svg
+          curl "${PSURL}/?url=${HOST}&strategy=mobile" > ./${RESULTSFOLDER}/${PSRMOBILE}.svg
     - name: Commit files 
       run: |
         git add .
-        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.email "actions@github.com"
         git config --local user.name "github-actions[bot]"
         git diff --quiet && git diff --staged --quiet || git commit -am "Update Pagespeed results"
     - name: Push changes
