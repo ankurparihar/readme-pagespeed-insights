@@ -52,7 +52,7 @@ https://pagespeed-insights.herokuapp.com?url=your_website_url&theme=dark
 ```
 
 ### Strategy
-Strategy specifiec the type of device your website is audited for. You can specify strategy as either `mobile` or `desktop`. If none is specified `desktop` is chosen
+Strategy specifies the type of device your website is audited for. You can specify strategy as either `mobile` or `desktop`. If none is specified `desktop` is chosen
 ```md
 https://pagespeed-insights.herokuapp.com?url=your_website_url&strategy=mobile
 ```
@@ -75,6 +75,24 @@ For example
 +------------+------------+------------+------------+------------+
 ```
 
+#### Only performance
+```md
+https://pagespeed-insights.herokuapp.com?url=your_website_url&categories=16
+```
+
+#### All but PWA
+```md
+https://pagespeed-insights.herokuapp.com?url=your_website_url&categories=30
+```
+
+
+### Accuracy
+
+Performance is volatile so you can request up to 3 performance tests to retrieve more precise results
+```md
+https://pagespeed-insights.herokuapp.com?url=your_website_url&tests=30
+```
+
 ### Embedding into readme
 After downloading svg you can embed into readme as following
 - markdown method
@@ -87,6 +105,9 @@ After downloading svg you can embed into readme as following
     <img src="/path/to/svg" width="XXXpx">
 </p>
 ```
+
+### Keep results updated with action workflow
+- [pagespeed.yml](.github/workflows/pagespeed.yml)
 
 ### Example
 - [ankurparihar.github.io](https://github.com/ankurparihar/ankurparihar.github.io#readme)
