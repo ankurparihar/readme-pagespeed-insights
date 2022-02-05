@@ -1,5 +1,5 @@
 {
-    "name": "pagespeed-insights",
+    "name": "readme-pagespeed-insights",
     "version": "1.0.0",
     "description": "GitHub README compatible PageSpeed Insights of your website",
     "main": "app.js",
@@ -12,9 +12,9 @@
     },
     "devDependencies": {},
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node app.js",
         "format": "prettier --write \"**/*.js\"",
-        "start": "node app.js"
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Ankur Parihar",
     "license": "ISC",
