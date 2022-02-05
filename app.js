@@ -1,286 +1,293 @@
 require("dotenv").config();
 
 const express = require("express"),
-	url = require("url"),
-	app = express(),
-	fetch = require("node-fetch"),
-	port = process.env.PORT || 3000,
-	API_KEY = process.env.API_KEY;
+    url = require("url"),
+    app = express(),
+    fetch = require("node-fetch"),
+    port = process.env.PORT || 3000,
+    API_KEY = process.env.API_KEY;
 
 app.listen(port, () => {
-	console.log(`lighthouse-stats app listening at PORT ${port}`);
+    console.log(`lighthouse-stats app listening at PORT ${port}`);
 });
 
 app.get("/", async (req, res) => {
-	// results
-	var performance = -1,
-		accessibility = -1,
-		best_practices = -1,
-		seo = -1,
-		pwa = -1;
+    // results
+    var performance = -1,
+        accessibility = -1,
+        best_practices = -1,
+        seo = -1,
+        pwa = -1;
 
-	const queryObject = url.parse(req.url, true).query,
-		strategy = queryObject.strategy || "desktop",
-		categories = queryObject.categories || 31,
-		theme = queryObject.theme || "agnostic",
-		performanceTests = Math.min(
-			3,
-			Math.max(1, parseInt(queryObject.tests) || 0)
-		),
-		pagespeedQueryURL = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${queryObject.url}&key=${API_KEY}&strategy=${strategy}&`;
-	var procedure =
-		((categories & 1) > 0) +
-		((categories & 2) > 0) +
-		((categories & 4) > 0) +
-		((categories & 8) > 0) +
-		((categories & 16) > 0 ? performanceTests : 0);
+    const queryObject = url.parse(req.url, true).query,
+        strategy = queryObject.strategy || "desktop",
+        categories = queryObject.categories || 31,
+        theme = queryObject.theme || "agnostic",
+        performanceTests = Math.min(
+            3,
+            Math.max(1, parseInt(queryObject.tests) || 0)
+        ),
+        pagespeedQueryURL = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${queryObject.url}&key=${API_KEY}&strategy=${strategy}&`;
+    var procedure =
+        ((categories & 1) > 0) +
+        ((categories & 2) > 0) +
+        ((categories & 4) > 0) +
+        ((categories & 8) > 0) +
+        ((categories & 16) > 0 ? performanceTests : 0);
 
-	if (procedure === 0) res.send("NA");
+    if (procedure === 0) res.send("NA");
 
-	// performance
-	const getPerformance = async () => {
-		if ((categories & 16) === 16) {
-			for (let i = 0; i < performanceTests; i++) {
-				console.log("Sending performance request #" + (i + 1));
-				await fetch(pagespeedQueryURL + `category=performance`)
-					.then((response) => response.json())
-					.then((json) => {
-						performance = Math.max(
-							performance,
-							Math.round(
-								json.lighthouseResult.categories.performance.score * 100
-							)
-						);
-					})
-					.catch((err) => {
-						// console.log(err)
-					})
-					.finally(() => {
-						procedure--;
-						if (procedure === 0)
-							proceed(
-								performance,
-								accessibility,
-								best_practices,
-								seo,
-								pwa,
-								res,
-								categories,
-								theme
-							);
-					});
-			}
-		}
-	};
+    // performance
+    const getPerformance = async () => {
+        if ((categories & 16) === 16) {
+            for (let i = 0; i < performanceTests; i++) {
+                console.log("Sending performance request #" + (i + 1));
+                await fetch(pagespeedQueryURL + `category=performance`)
+                    .then((response) => response.json())
+                    .then((json) => {
+                        performance = Math.max(
+                            performance,
+                            Math.round(
+                                json.lighthouseResult.categories.performance
+                                    .score * 100
+                            )
+                        );
+                    })
+                    .catch((err) => {
+                        // console.log(err)
+                    })
+                    .finally(() => {
+                        procedure--;
+                        if (procedure === 0)
+                            proceed(
+                                performance,
+                                accessibility,
+                                best_practices,
+                                seo,
+                                pwa,
+                                res,
+                                categories,
+                                theme
+                            );
+                    });
+            }
+        }
+    };
 
-	// accessibility
-	const getA11y = async () => {
-		if ((categories & 8) === 8) {
-			console.log("Sending a11y request");
-			await fetch(pagespeedQueryURL + `category=accessibility`)
-				.then((response) => response.json())
-				.then((json) => {
-					accessibility = Math.round(
-						json.lighthouseResult.categories.accessibility.score * 100
-					);
-				})
-				.catch((err) => {
-					// console.log(err)
-				})
-				.finally(() => {
-					procedure--;
-					if (procedure === 0)
-						proceed(
-							performance,
-							accessibility,
-							best_practices,
-							seo,
-							pwa,
-							res,
-							categories,
-							theme
-						);
-				});
-		}
-	};
+    // accessibility
+    const getA11y = async () => {
+        if ((categories & 8) === 8) {
+            console.log("Sending a11y request");
+            await fetch(pagespeedQueryURL + `category=accessibility`)
+                .then((response) => response.json())
+                .then((json) => {
+                    accessibility = Math.round(
+                        json.lighthouseResult.categories.accessibility.score *
+                            100
+                    );
+                })
+                .catch((err) => {
+                    // console.log(err)
+                })
+                .finally(() => {
+                    procedure--;
+                    if (procedure === 0)
+                        proceed(
+                            performance,
+                            accessibility,
+                            best_practices,
+                            seo,
+                            pwa,
+                            res,
+                            categories,
+                            theme
+                        );
+                });
+        }
+    };
 
-	// best practices
-	const getBestPractices = async () => {
-		if ((categories & 4) === 4) {
-			console.log("Sending best practices request");
-			await fetch(pagespeedQueryURL + `category=best-practices`)
-				.then((response) => response.json())
-				.then((json) => {
-					best_practices = Math.round(
-						json.lighthouseResult.categories["best-practices"].score * 100
-					);
-				})
-				.catch((err) => {
-					// console.log(err)
-				})
-				.finally(() => {
-					procedure--;
-					if (procedure === 0)
-						proceed(
-							performance,
-							accessibility,
-							best_practices,
-							seo,
-							pwa,
-							res,
-							categories,
-							theme
-						);
-				});
-		}
-	};
+    // best practices
+    const getBestPractices = async () => {
+        if ((categories & 4) === 4) {
+            console.log("Sending best practices request");
+            await fetch(pagespeedQueryURL + `category=best-practices`)
+                .then((response) => response.json())
+                .then((json) => {
+                    best_practices = Math.round(
+                        json.lighthouseResult.categories["best-practices"]
+                            .score * 100
+                    );
+                })
+                .catch((err) => {
+                    // console.log(err)
+                })
+                .finally(() => {
+                    procedure--;
+                    if (procedure === 0)
+                        proceed(
+                            performance,
+                            accessibility,
+                            best_practices,
+                            seo,
+                            pwa,
+                            res,
+                            categories,
+                            theme
+                        );
+                });
+        }
+    };
 
-	const getSEO = async () => {
-		// seo
-		if ((categories & 2) === 2) {
-			console.log("Sending SEO request");
-			await fetch(pagespeedQueryURL + `category=seo`)
-				.then((response) => response.json())
-				.then((json) => {
-					seo = Math.round(
-						json.lighthouseResult.categories.seo.score * 100
-					);
-				})
-				.catch((err) => {
-					// console.log(err)
-				})
-				.finally(() => {
-					procedure--;
-					if (procedure === 0)
-						proceed(
-							performance,
-							accessibility,
-							best_practices,
-							seo,
-							pwa,
-							res,
-							categories,
-							theme
-						);
-				});
-		}
-	};
+    const getSEO = async () => {
+        // seo
+        if ((categories & 2) === 2) {
+            console.log("Sending SEO request");
+            await fetch(pagespeedQueryURL + `category=seo`)
+                .then((response) => response.json())
+                .then((json) => {
+                    seo = Math.round(
+                        json.lighthouseResult.categories.seo.score * 100
+                    );
+                })
+                .catch((err) => {
+                    // console.log(err)
+                })
+                .finally(() => {
+                    procedure--;
+                    if (procedure === 0)
+                        proceed(
+                            performance,
+                            accessibility,
+                            best_practices,
+                            seo,
+                            pwa,
+                            res,
+                            categories,
+                            theme
+                        );
+                });
+        }
+    };
 
-	// pwa
-	const getPWA = async () => {
-		if ((categories & 1) === 1) {
-			console.log("Sending PWA request");
-			await fetch(pagespeedQueryURL + `category=pwa`)
-				.then((response) => response.json())
-				.then((json) => {
-					const lighthouseResult = json.lighthouseResult;
-					var fast_reliable = 0,
-						fast_reliable_total = 0,
-						installable = 0,
-						installable_total = 0,
-						optimized = 0,
-						optimized_total = 0;
-					lighthouseResult.categories.pwa.auditRefs.forEach((auditRef) => {
-						var audit = lighthouseResult.audits[auditRef.id];
-						if (
-							audit.scoreDisplayMode === "binary" ||
-							audit.scoreDisplayMode === "numeric"
-						) {
-							if (auditRef.group === "pwa-fast-reliable") {
-								fast_reliable_total++;
-								if (audit && audit.score >= 0.9) {
-									fast_reliable++;
-								}
-							} else if (auditRef.group === "pwa-installable") {
-								installable_total++;
-								if (audit && audit.score >= 0.9) {
-									installable++;
-								}
-							} else if (auditRef.group === "pwa-optimized") {
-								optimized_total++;
-								if (audit && audit.score >= 0.9) {
-									optimized++;
-								}
-							}
-						}
-					});
-					pwa = 0;
-					if (fast_reliable === fast_reliable_total) pwa |= 1;
-					if (installable === installable_total) pwa |= 2;
-					if (optimized === optimized_total) pwa |= 4;
-				})
-				.catch((err) => {
-					// console.log(err)
-				})
-				.finally(() => {
-					procedure--;
-					if (procedure === 0)
-						proceed(
-							performance,
-							accessibility,
-							best_practices,
-							seo,
-							pwa,
-							res,
-							categories,
-							theme
-						);
-				});
-		}
-	};
+    // pwa
+    const getPWA = async () => {
+        if ((categories & 1) === 1) {
+            console.log("Sending PWA request");
+            await fetch(pagespeedQueryURL + `category=pwa`)
+                .then((response) => response.json())
+                .then((json) => {
+                    const lighthouseResult = json.lighthouseResult;
+                    var fast_reliable = 0,
+                        fast_reliable_total = 0,
+                        installable = 0,
+                        installable_total = 0,
+                        optimized = 0,
+                        optimized_total = 0;
+                    lighthouseResult.categories.pwa.auditRefs.forEach(
+                        (auditRef) => {
+                            var audit = lighthouseResult.audits[auditRef.id];
+                            if (
+                                audit.scoreDisplayMode === "binary" ||
+                                audit.scoreDisplayMode === "numeric"
+                            ) {
+                                if (auditRef.group === "pwa-fast-reliable") {
+                                    fast_reliable_total++;
+                                    if (audit && audit.score >= 0.9) {
+                                        fast_reliable++;
+                                    }
+                                } else if (
+                                    auditRef.group === "pwa-installable"
+                                ) {
+                                    installable_total++;
+                                    if (audit && audit.score >= 0.9) {
+                                        installable++;
+                                    }
+                                } else if (auditRef.group === "pwa-optimized") {
+                                    optimized_total++;
+                                    if (audit && audit.score >= 0.9) {
+                                        optimized++;
+                                    }
+                                }
+                            }
+                        }
+                    );
+                    pwa = 0;
+                    if (fast_reliable === fast_reliable_total) pwa |= 1;
+                    if (installable === installable_total) pwa |= 2;
+                    if (optimized === optimized_total) pwa |= 4;
+                })
+                .catch((err) => {
+                    // console.log(err)
+                })
+                .finally(() => {
+                    procedure--;
+                    if (procedure === 0)
+                        proceed(
+                            performance,
+                            accessibility,
+                            best_practices,
+                            seo,
+                            pwa,
+                            res,
+                            categories,
+                            theme
+                        );
+                });
+        }
+    };
 
-	await Promise.all([
-		getPerformance(),
-		getBestPractices(),
-		getA11y(),
-		getSEO(),
-		getPWA(),
-	]);
+    await Promise.all([
+        getPerformance(),
+        getBestPractices(),
+        getA11y(),
+        getSEO(),
+        getPWA(),
+    ]);
 });
 
 const guageClass = (score) => {
-	if (score >= 90) {
-		return "guage-green";
-	} else if (score >= 50) {
-		return "guage-orange";
-	} else if (score >= 0) {
-		return "guage-red";
-	}
-	return "guage-undefined";
+    if (score >= 90) {
+        return "guage-green";
+    } else if (score >= 50) {
+        return "guage-orange";
+    } else if (score >= 0) {
+        return "guage-red";
+    }
+    return "guage-undefined";
 };
 
 const proceed = (
-	performance,
-	accessibility,
-	best_practices,
-	seo,
-	pwa,
-	res,
-	categories,
-	theme
+    performance,
+    accessibility,
+    best_practices,
+    seo,
+    pwa,
+    res,
+    categories,
+    theme
 ) => {
-	console.log(
-		`Scores: ${performance} performance; ${accessibility} accessibility; ${best_practices} best practices; ${seo} seo; ${pwa} pwa`
-	);
-	// test
-	// performance = 95
-	// accessibility = 100
-	// best_practices = 76
-	// seo = 40
-	// pwa = 3
-	// prepare svg and send
-	let procedure =
-		((categories & 1) > 0) +
-		((categories & 2) > 0) +
-		((categories & 4) > 0) +
-		((categories & 8) > 0) +
-		((categories & 16) > 0);
-	var offset1 = 500 - procedure * 100;
-	var offset2 = offset1 + ((categories & 16) === 16 ? 200 : 0);
-	var offset3 = offset2 + ((categories & 8) === 8 ? 200 : 0);
-	var offset4 = offset3 + ((categories & 4) === 4 ? 200 : 0);
-	var offset5 = offset4 + ((categories & 2) === 2 ? 200 : 0);
-	let svg = `
+    console.log(
+        `Scores: ${performance} performance; ${accessibility} accessibility; ${best_practices} best practices; ${seo} seo; ${pwa} pwa`
+    );
+    // test
+    // performance = 95
+    // accessibility = 100
+    // best_practices = 76
+    // seo = 40
+    // pwa = 3
+    // prepare svg and send
+    let procedure =
+        ((categories & 1) > 0) +
+        ((categories & 2) > 0) +
+        ((categories & 4) > 0) +
+        ((categories & 8) > 0) +
+        ((categories & 16) > 0);
+    var offset1 = 500 - procedure * 100;
+    var offset2 = offset1 + ((categories & 16) === 16 ? 200 : 0);
+    var offset3 = offset2 + ((categories & 8) === 8 ? 200 : 0);
+    var offset4 = offset3 + ((categories & 4) === 4 ? 200 : 0);
+    var offset5 = offset4 + ((categories & 2) === 2 ? 200 : 0);
+    let svg = `
 	<svg class="theme--${theme}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" width="1000" height="330">
 		<style>
 			.gauge-base {
@@ -402,56 +409,62 @@ const proceed = (
 			}
 		</style>
 		<svg class="guage-div guage-perf ${
-			(categories & 16) === 16 ? guageClass(performance) : "guage-invisible"
-		}" viewBox="0 0 200 200" width="200" height="200" x="${offset1}" y="0">
+            (categories & 16) === 16
+                ? guageClass(performance)
+                : "guage-invisible"
+        }" viewBox="0 0 200 200" width="200" height="200" x="${offset1}" y="0">
 			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
 			<circle class="gauge-arc guage-arc-1" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${
-				performance >= 0 ? (performance * 351.858) / 100 : 351.858
-			}, 351.858;"></circle>
+                performance >= 0 ? (performance * 351.858) / 100 : 351.858
+            }, 351.858;"></circle>
 			<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${
-				performance >= 0 ? performance : "NA"
-			}</text>
+                performance >= 0 ? performance : "NA"
+            }</text>
 			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Performance</text>
 		</svg>
 		<svg class="guage-div guage-acc ${
-			(categories & 8) === 8 ? guageClass(accessibility) : "guage-invisible"
-		}" viewBox="0 0 200 200" width="200" height="200" x="${offset2}" y="0">
+            (categories & 8) === 8
+                ? guageClass(accessibility)
+                : "guage-invisible"
+        }" viewBox="0 0 200 200" width="200" height="200" x="${offset2}" y="0">
 			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
 			<circle class="gauge-arc guage-arc-2" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${
-				accessibility >= 0 ? (accessibility * 351.858) / 100 : 351.858
-			}, 351.858;"></circle>
+                accessibility >= 0 ? (accessibility * 351.858) / 100 : 351.858
+            }, 351.858;"></circle>
 			<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${
-				accessibility >= 0 ? accessibility : "NA"
-			}</text>
+                accessibility >= 0 ? accessibility : "NA"
+            }</text>
 			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Accessibility</text>
 		</svg>
 		<svg class="guage-div guage-best ${
-			(categories & 4) === 4 ? guageClass(best_practices) : "guage-invisible"
-		}" viewBox="0 0 200 200" width="200" height="200" x="${offset3}" y="0">
+            (categories & 4) === 4
+                ? guageClass(best_practices)
+                : "guage-invisible"
+        }" viewBox="0 0 200 200" width="200" height="200" x="${offset3}" y="0">
 			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
 			<circle class="gauge-arc guage-arc-3" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${
-				best_practices >= 0 ? (best_practices * 351.858) / 100 : 351.858
-			}, 351.858;"></circle>
+                best_practices >= 0 ? (best_practices * 351.858) / 100 : 351.858
+            }, 351.858;"></circle>
 			<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${
-				best_practices >= 0 ? best_practices : "NA"
-			}</text>
+                best_practices >= 0 ? best_practices : "NA"
+            }</text>
 			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Best Practices</text>
 		</svg>
 		<svg class="guage-div guage-seo ${
-			(categories & 2) === 2 ? guageClass(seo) : "guage-invisible"
-		}" viewBox="0 0 200 200" width="200" height="200" x="${offset4}" y="0">
+            (categories & 2) === 2 ? guageClass(seo) : "guage-invisible"
+        }" viewBox="0 0 200 200" width="200" height="200" x="${offset4}" y="0">
 			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
 			<circle class="gauge-arc guage-arc-4" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${
-				seo >= 0 ? (seo * 351.858) / 100 : 351.858
-			}, 351.858;"></circle>
+                seo >= 0 ? (seo * 351.858) / 100 : 351.858
+            }, 351.858;"></circle>
 			<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${
-				seo >= 0 ? seo : "NA"
-			}</text>
+                seo >= 0 ? seo : "NA"
+            }</text>
 			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">SEO</text>
 		</svg>
 		<svg class="guage-div guage-pwa ${
-			(categories & 1) === 1 ? "" : "guage-invisible"
-		}" viewBox="0 0 200 200" width="200" height="200" x="${offset5}" y="0">
+            (categories & 1) === 1 ? "" : "guage-invisible"
+        }" viewBox="0 0 200 200" width="200" height="200" x="${offset5}" y="0">
 			<svg viewBox="0 0 60 60" width="112" height="112" x="44" y="4">
 				<defs>
 					<linearGradient id="lh-gauge--pwa__check-circle__gradient-0" x1="50%" y1="0%" x2="50%" y2="100%">
@@ -481,51 +494,51 @@ const proceed = (
 					<circle class="lh-gauge--pwa__disc" cx="30" cy="30" r="30"></circle>
 					<g class="lh-gauge--pwa__logo">
 						<path ${
-							pwa === 7
-								? 'class="lh-gauge--pwa__logo--secondary-color"'
-								: ""
-						} d="M35.66 19.39l.7-1.75h2L37.4 15 38.6 12l3.4 9h-2.51l-.58-1.61z"></path>
+                            pwa === 7
+                                ? 'class="lh-gauge--pwa__logo--secondary-color"'
+                                : ""
+                        } d="M35.66 19.39l.7-1.75h2L37.4 15 38.6 12l3.4 9h-2.51l-.58-1.61z"></path>
 						<path ${
-							pwa === 7
-								? 'class="lh-gauge--pwa__logo--primary-color"'
-								: ""
-						} d="M33.52 21l3.65-9h-2.42l-2.5 5.82L30.5 12h-1.86l-1.9 5.82-1.35-2.65-1.21 3.72L25.4 21h2.38l1.72-5.2 1.64 5.2z"></path>
+                            pwa === 7
+                                ? 'class="lh-gauge--pwa__logo--primary-color"'
+                                : ""
+                        } d="M33.52 21l3.65-9h-2.42l-2.5 5.82L30.5 12h-1.86l-1.9 5.82-1.35-2.65-1.21 3.72L25.4 21h2.38l1.72-5.2 1.64 5.2z"></path>
 						<path ${
-							pwa === 7
-								? 'class="lh-gauge--pwa__logo--secondary-color"'
-								: ""
-						} fill-rule="nonzero" d="M20.3 17.91h1.48c.45 0 .85-.05 1.2-.15l.39-1.18 1.07-3.3a2.64 2.64 0 0 0-.28-.37c-.55-.6-1.36-.91-2.42-.91H18v9h2.3V17.9zm1.96-3.84c.22.22.33.5.33.87 0 .36-.1.65-.29.87-.2.23-.59.35-1.15.35h-.86v-2.41h.87c.52 0 .89.1 1.1.32z"></path>
+                            pwa === 7
+                                ? 'class="lh-gauge--pwa__logo--secondary-color"'
+                                : ""
+                        } fill-rule="nonzero" d="M20.3 17.91h1.48c.45 0 .85-.05 1.2-.15l.39-1.18 1.07-3.3a2.64 2.64 0 0 0-.28-.37c-.55-.6-1.36-.91-2.42-.91H18v9h2.3V17.9zm1.96-3.84c.22.22.33.5.33.87 0 .36-.1.65-.29.87-.2.23-.59.35-1.15.35h-.86v-2.41h.87c.52 0 .89.1 1.1.32z"></path>
 					</g>
 					<!-- No badges. -->
 					<rect class="lh-gauge--pwa__component lh-gauge--pwa__na-line ${
-						pwa === 0
-							? "lh-gauge--pwa__visible"
-							: "lh-gauge--pwa__invisible"
-					}" fill="#FFFFFF" x="20" y="32" width="20" height="4" rx="2"></rect>
+                        pwa === 0
+                            ? "lh-gauge--pwa__visible"
+                            : "lh-gauge--pwa__invisible"
+                    }" fill="#FFFFFF" x="20" y="32" width="20" height="4" rx="2"></rect>
 					<!-- Just fast and reliable. -->
 					<g class="lh-gauge--pwa__component lh-gauge--pwa__fast-reliable-badge ${
-						pwa === 1
-							? "lh-gauge--pwa__visible"
-							: "lh-gauge--pwa__invisible"
-					}" transform="translate(20, 29)">
+                        pwa === 1
+                            ? "lh-gauge--pwa__visible"
+                            : "lh-gauge--pwa__invisible"
+                    }" transform="translate(20, 29)">
 						<path fill="url(#lh-gauge--pwa__fast-reliable__shadow-gradient-0)" d="M33.63 19.49A30 30 0 0 1 16.2 30.36L3 17.14 17.14 3l16.49 16.49z"></path>
 						<use href="#lh-gauge--pwa__fast-reliable-badge-0"></use>
 					</g>
 					<!-- Just installable. -->
 					<g class="lh-gauge--pwa__component lh-gauge--pwa__installable-badge ${
-						pwa === 2
-							? "lh-gauge--pwa__visible"
-							: "lh-gauge--pwa__invisible"
-					}" transform="translate(20, 29)">
+                        pwa === 2
+                            ? "lh-gauge--pwa__visible"
+                            : "lh-gauge--pwa__invisible"
+                    }" transform="translate(20, 29)">
 						<path fill="url(#lh-gauge--pwa__installable__shadow-gradient-0)" d="M33.629 19.487c-4.272 5.453-10.391 9.39-17.415 10.869L3 17.142 17.142 3 33.63 19.487z"></path>
 						<use href="#lh-gauge--pwa__installable-badge-0"></use>
 					</g>
 					<!-- Fast and reliable and installable. -->
 					<g class="lh-gauge--pwa__component lh-gauge--pwa__fast-reliable-installable-badges ${
-						pwa === 3
-							? "lh-gauge--pwa__visible"
-							: "lh-gauge--pwa__invisible"
-					}">
+                        pwa === 3
+                            ? "lh-gauge--pwa__visible"
+                            : "lh-gauge--pwa__invisible"
+                    }">
 						<g transform="translate(8, 29)">						<!-- fast and reliable -->
 							<path fill="url(#lh-gauge--pwa__fast-reliable__shadow-gradient-0)" d="M16.321 30.463L3 17.143 17.142 3l22.365 22.365A29.864 29.864 0 0 1 22 31c-1.942 0-3.84-.184-5.679-.537z"></path>
 							<use href="#lh-gauge--pwa__fast-reliable-badge-0"></use>
@@ -537,10 +550,10 @@ const proceed = (
 					</g>
 					<!-- Full PWA. -->
 					<g class="lh-gauge--pwa__component lh-gauge--pwa__check-circle ${
-						pwa === 7
-							? "lh-gauge--pwa__visible"
-							: "lh-gauge--pwa__invisible"
-					}" transform="translate(18, 28)">
+                        pwa === 7
+                            ? "lh-gauge--pwa__visible"
+                            : "lh-gauge--pwa__invisible"
+                    }" transform="translate(18, 28)">
 						<circle fill="#FFFFFF" cx="12" cy="12" r="12"></circle>
 						<path fill="url(#lh-gauge--pwa__check-circle__gradient-0)" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
 					</g>
@@ -569,7 +582,7 @@ const proceed = (
 			</g>
 		</svg>
 	</svg>`;
-	res.setHeader("Content-Type", "image/svg+xml");
-	res.send(svg);
-	// res.send(`performance: ${performance}, accessibility: ${accessibility}, best-practices: ${best_practices}, seo: ${seo}, pwa: {fast and reliable: ${fast_reliable}/${fast_reliable_total}, installable: ${installable}/${installable_total}, optimized: ${optimized}/${optimized_total}}`)
+    res.setHeader("Content-Type", "image/svg+xml");
+    res.send(svg);
+    // res.send(`performance: ${performance}, accessibility: ${accessibility}, best-practices: ${best_practices}, seo: ${seo}, pwa: {fast and reliable: ${fast_reliable}/${fast_reliable_total}, installable: ${installable}/${installable_total}, optimized: ${optimized}/${optimized_total}}`)
 };
