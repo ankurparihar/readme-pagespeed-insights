@@ -9,15 +9,131 @@ const guageClass = (score) => {
     return "guage-undefined";
 };
 
+const getSimpleGuage = (label, score, offset) => {
+    return `<svg class="guage-div guage-perf ${guageClass(score)}"
+				viewBox="0 0 200 200" width="200" height="200" x="${offset}" y="0">
+		<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
+		<circle class="gauge-arc guage-arc-1" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${
+            score >= 0 ? (score * 351.858) / 100 : 351.858
+        }, 351.858;"></circle>
+		<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${
+            score >= 0 ? score : "NA"
+        }</text>
+		<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${label}</text>
+	</svg>`;
+};
+
+const getPWAGuage = (score, offset) => {
+    return `<svg class="guage-div guage-pwa" viewBox="0 0 200 200" width="200" height="200" x="${offset}" y="0">
+		<svg viewBox="0 0 60 60" width="112" height="112" x="44" y="4">
+			<defs>
+				<linearGradient id="lh-gauge--pwa__check-circle__gradient-0" x1="50%" y1="0%" x2="50%" y2="100%">
+					<stop stop-color="#00C852" offset="0%"></stop>
+					<stop stop-color="#009688" offset="100%"></stop>
+				</linearGradient>
+				<linearGradient id="lh-gauge--pwa__installable__shadow-gradient-0" x1="76.056%" x2="24.111%" y1="82.995%" y2="24.735%">
+					<stop stop-color="#A5D6A7" offset="0%"></stop>
+					<stop stop-color="#80CBC4" offset="100%"></stop>
+				</linearGradient>
+				<linearGradient id="lh-gauge--pwa__fast-reliable__shadow-gradient-0" x1="76.056%" y1="82.995%" x2="25.678%" y2="26.493%">
+					<stop stop-color="#64B5F6" offset="0%"></stop>
+					<stop stop-color="#2979FF" offset="100%"></stop>
+				</linearGradient>
+
+				<g id="lh-gauge--pwa__fast-reliable-badge-0">
+					<circle fill="#FFFFFF" cx="10" cy="10" r="10"></circle>
+					<path fill="#304FFE" d="M10 3.58l5.25 2.34v3.5c0 3.23-2.24 6.26-5.25 7-3.01-.74-5.25-3.77-5.25-7v-3.5L10 3.58zm-.47 10.74l2.76-4.83.03-.07c.04-.08 0-.24-.22-.24h-1.64l.47-3.26h-.47l-2.7 4.77c-.02.01.05-.1-.04.05-.09.16-.1.31.18.31h1.63l-.47 3.27h.47z"></path>
+				</g>
+				<g id="lh-gauge--pwa__installable-badge-0">
+					<circle fill="#FFFFFF" cx="10" cy="10" r="10"></circle>
+					<path fill="#009688" d="M10 4.167A5.835 5.835 0 0 0 4.167 10 5.835 5.835 0 0 0 10 15.833 5.835 5.835 0 0 0 15.833 10 5.835 5.835 0 0 0 10 4.167zm2.917 6.416h-2.334v2.334H9.417v-2.334H7.083V9.417h2.334V7.083h1.166v2.334h2.334v1.166z"></path>
+				</g>
+			</defs>
+			<g stroke="none" fill-rule="nonzero">
+				<!-- Background and PWA logo (color by default) -->
+				<circle class="lh-gauge--pwa__disc" cx="30" cy="30" r="30"></circle>
+				<g class="lh-gauge--pwa__logo">
+					<path ${
+                        score === 7 ? 'class="lh-gauge--pwa__logo--secondary-color"' : ""
+                    } d="M35.66 19.39l.7-1.75h2L37.4 15 38.6 12l3.4 9h-2.51l-.58-1.61z"></path>
+					<path ${
+                        score === 7 ? 'class="lh-gauge--pwa__logo--primary-color"' : ""
+                    } d="M33.52 21l3.65-9h-2.42l-2.5 5.82L30.5 12h-1.86l-1.9 5.82-1.35-2.65-1.21 3.72L25.4 21h2.38l1.72-5.2 1.64 5.2z"></path>
+					<path ${
+                        score === 7 ? 'class="lh-gauge--pwa__logo--secondary-color"' : ""
+                    } fill-rule="nonzero" d="M20.3 17.91h1.48c.45 0 .85-.05 1.2-.15l.39-1.18 1.07-3.3a2.64 2.64 0 0 0-.28-.37c-.55-.6-1.36-.91-2.42-.91H18v9h2.3V17.9zm1.96-3.84c.22.22.33.5.33.87 0 .36-.1.65-.29.87-.2.23-.59.35-1.15.35h-.86v-2.41h.87c.52 0 .89.1 1.1.32z"></path>
+				</g>
+				<!-- No badges. -->
+				<rect class="lh-gauge--pwa__component lh-gauge--pwa__na-line ${
+                    score === 0 ? "lh-gauge--pwa__visible" : "lh-gauge--pwa__invisible"
+                }" fill="#FFFFFF" x="20" y="32" width="20" height="4" rx="2"></rect>
+				<!-- Just fast and reliable. -->
+				<g class="lh-gauge--pwa__component lh-gauge--pwa__fast-reliable-badge ${
+                    score === 1 ? "lh-gauge--pwa__visible" : "lh-gauge--pwa__invisible"
+                }" transform="translate(20, 29)">
+					<path fill="url(#lh-gauge--pwa__fast-reliable__shadow-gradient-0)" d="M33.63 19.49A30 30 0 0 1 16.2 30.36L3 17.14 17.14 3l16.49 16.49z"></path>
+					<use href="#lh-gauge--pwa__fast-reliable-badge-0"></use>
+				</g>
+				<!-- Just installable. -->
+				<g class="lh-gauge--pwa__component lh-gauge--pwa__installable-badge ${
+                    score === 2 ? "lh-gauge--pwa__visible" : "lh-gauge--pwa__invisible"
+                }" transform="translate(20, 29)">
+					<path fill="url(#lh-gauge--pwa__installable__shadow-gradient-0)" d="M33.629 19.487c-4.272 5.453-10.391 9.39-17.415 10.869L3 17.142 17.142 3 33.63 19.487z"></path>
+					<use href="#lh-gauge--pwa__installable-badge-0"></use>
+				</g>
+				<!-- Fast and reliable and installable. -->
+				<g class="lh-gauge--pwa__component lh-gauge--pwa__fast-reliable-installable-badges ${
+                    score === 3 ? "lh-gauge--pwa__visible" : "lh-gauge--pwa__invisible"
+                }">
+					<g transform="translate(8, 29)">						<!-- fast and reliable -->
+						<path fill="url(#lh-gauge--pwa__fast-reliable__shadow-gradient-0)" d="M16.321 30.463L3 17.143 17.142 3l22.365 22.365A29.864 29.864 0 0 1 22 31c-1.942 0-3.84-.184-5.679-.537z"></path>
+						<use href="#lh-gauge--pwa__fast-reliable-badge-0"></use>
+					</g>
+					<g transform="translate(32, 29)">						<!-- installable -->
+						<path fill="url(#lh-gauge--pwa__installable__shadow-gradient-0)" d="M25.982 11.84a30.107 30.107 0 0 1-13.08 15.203L3 17.143 17.142 3l8.84 8.84z"></path>
+						<use href="#lh-gauge--pwa__installable-badge-0"></use>
+					</g>
+				</g>
+				<!-- Full PWA. -->
+				<g class="lh-gauge--pwa__component lh-gauge--pwa__check-circle ${
+                    score === 7 ? "lh-gauge--pwa__visible" : "lh-gauge--pwa__invisible"
+                }" transform="translate(18, 28)">
+					<circle fill="#FFFFFF" cx="12" cy="12" r="12"></circle>
+					<path fill="url(#lh-gauge--pwa__check-circle__gradient-0)" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+				</g>
+			</g>
+		</svg>
+		<text class="guage-title" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">
+			<tspan x="100px" dy="-6px">Progressive</tspan>
+			<tspan x="100px" dy="30px">Web App</tspan>
+		</text>
+	</svg>`;
+};
+
+const lableMaps = {
+    "performance": "Performance",
+    "accessibility": "Accessibility",
+    "best-practices": "Best Practices",
+    "seo": "SEO",
+};
+
+const getGuageSVG = (indicator, score, offset) => {
+    switch (indicator) {
+        case "pwa":
+            return getPWAGuage(score, offset);
+        case "performance":
+        case "accessibility":
+        case "best-practices":
+        case "seo":
+            return getSimpleGuage(lableMaps[indicator], score, offset);
+        default:
+            return "NA";
+    }
+};
+
 // TODO: order of svgs
 const buildSVG = ({ theme, scores }) => {
-    const { performance, accessibility, "best-practices": best_practices, seo, pwa } = scores;
-
-    const offset1 = 500 - Object.keys(scores).length * 100;
-    const offset2 = offset1 + (performance !== undefined ? 200 : 0);
-    const offset3 = offset2 + (accessibility !== undefined ? 200 : 0);
-    const offset4 = offset3 + (best_practices !== undefined ? 200 : 0);
-    const offset5 = offset4 + (seo !== undefined ? 200 : 0);
+    let offset = 500 - Object.keys(scores).length * 100;
 
     const svg = `
 	<svg class="theme--${theme}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" width="1000" height="330">
@@ -140,140 +256,7 @@ const buildSVG = ({ theme, scores }) => {
 				stroke: #f5f5f566
 			}
 		</style>
-		<svg class="guage-div guage-perf ${
-            scores["performance"] !== undefined ? guageClass(performance) : "guage-invisible"
-        }" viewBox="0 0 200 200" width="200" height="200" x="${offset1}" y="0">
-			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
-			<circle class="gauge-arc guage-arc-1" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${
-                performance >= 0 ? (performance * 351.858) / 100 : 351.858
-            }, 351.858;"></circle>
-			<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${
-                performance >= 0 ? performance : "NA"
-            }</text>
-			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Performance</text>
-		</svg>
-		<svg class="guage-div guage-acc ${
-            scores["accessibility"] !== undefined ? guageClass(accessibility) : "guage-invisible"
-        }" viewBox="0 0 200 200" width="200" height="200" x="${offset2}" y="0">
-			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
-			<circle class="gauge-arc guage-arc-2" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${
-                accessibility >= 0 ? (accessibility * 351.858) / 100 : 351.858
-            }, 351.858;"></circle>
-			<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${
-                accessibility >= 0 ? accessibility : "NA"
-            }</text>
-			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Accessibility</text>
-		</svg>
-		<svg class="guage-div guage-best ${
-            scores["best-practices"] !== undefined ? guageClass(best_practices) : "guage-invisible"
-        }" viewBox="0 0 200 200" width="200" height="200" x="${offset3}" y="0">
-			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
-			<circle class="gauge-arc guage-arc-3" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${
-                best_practices >= 0 ? (best_practices * 351.858) / 100 : 351.858
-            }, 351.858;"></circle>
-			<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${
-                best_practices >= 0 ? best_practices : "NA"
-            }</text>
-			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Best Practices</text>
-		</svg>
-		<svg class="guage-div guage-seo ${
-            scores["seo"] !== undefined ? guageClass(seo) : "guage-invisible"
-        }" viewBox="0 0 200 200" width="200" height="200" x="${offset4}" y="0">
-			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
-			<circle class="gauge-arc guage-arc-4" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${
-                seo >= 0 ? (seo * 351.858) / 100 : 351.858
-            }, 351.858;"></circle>
-			<text class="guage-text" x="100px" y="60px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">${
-                seo >= 0 ? seo : "NA"
-            }</text>
-			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">SEO</text>
-		</svg>
-		<svg class="guage-div guage-pwa ${
-            scores["pwa"] !== undefined ? "" : "guage-invisible"
-        }" viewBox="0 0 200 200" width="200" height="200" x="${offset5}" y="0">
-			<svg viewBox="0 0 60 60" width="112" height="112" x="44" y="4">
-				<defs>
-					<linearGradient id="lh-gauge--pwa__check-circle__gradient-0" x1="50%" y1="0%" x2="50%" y2="100%">
-						<stop stop-color="#00C852" offset="0%"></stop>
-						<stop stop-color="#009688" offset="100%"></stop>
-					</linearGradient>
-					<linearGradient id="lh-gauge--pwa__installable__shadow-gradient-0" x1="76.056%" x2="24.111%" y1="82.995%" y2="24.735%">
-						<stop stop-color="#A5D6A7" offset="0%"></stop>
-						<stop stop-color="#80CBC4" offset="100%"></stop>
-					</linearGradient>
-					<linearGradient id="lh-gauge--pwa__fast-reliable__shadow-gradient-0" x1="76.056%" y1="82.995%" x2="25.678%" y2="26.493%">
-						<stop stop-color="#64B5F6" offset="0%"></stop>
-						<stop stop-color="#2979FF" offset="100%"></stop>
-					</linearGradient>
-
-					<g id="lh-gauge--pwa__fast-reliable-badge-0">
-						<circle fill="#FFFFFF" cx="10" cy="10" r="10"></circle>
-						<path fill="#304FFE" d="M10 3.58l5.25 2.34v3.5c0 3.23-2.24 6.26-5.25 7-3.01-.74-5.25-3.77-5.25-7v-3.5L10 3.58zm-.47 10.74l2.76-4.83.03-.07c.04-.08 0-.24-.22-.24h-1.64l.47-3.26h-.47l-2.7 4.77c-.02.01.05-.1-.04.05-.09.16-.1.31.18.31h1.63l-.47 3.27h.47z"></path>
-					</g>
-					<g id="lh-gauge--pwa__installable-badge-0">
-						<circle fill="#FFFFFF" cx="10" cy="10" r="10"></circle>
-						<path fill="#009688" d="M10 4.167A5.835 5.835 0 0 0 4.167 10 5.835 5.835 0 0 0 10 15.833 5.835 5.835 0 0 0 15.833 10 5.835 5.835 0 0 0 10 4.167zm2.917 6.416h-2.334v2.334H9.417v-2.334H7.083V9.417h2.334V7.083h1.166v2.334h2.334v1.166z"></path>
-					</g>
-				</defs>
-				<g stroke="none" fill-rule="nonzero">
-					<!-- Background and PWA logo (color by default) -->
-					<circle class="lh-gauge--pwa__disc" cx="30" cy="30" r="30"></circle>
-					<g class="lh-gauge--pwa__logo">
-						<path ${
-                            pwa === 7 ? 'class="lh-gauge--pwa__logo--secondary-color"' : ""
-                        } d="M35.66 19.39l.7-1.75h2L37.4 15 38.6 12l3.4 9h-2.51l-.58-1.61z"></path>
-						<path ${
-                            pwa === 7 ? 'class="lh-gauge--pwa__logo--primary-color"' : ""
-                        } d="M33.52 21l3.65-9h-2.42l-2.5 5.82L30.5 12h-1.86l-1.9 5.82-1.35-2.65-1.21 3.72L25.4 21h2.38l1.72-5.2 1.64 5.2z"></path>
-						<path ${
-                            pwa === 7 ? 'class="lh-gauge--pwa__logo--secondary-color"' : ""
-                        } fill-rule="nonzero" d="M20.3 17.91h1.48c.45 0 .85-.05 1.2-.15l.39-1.18 1.07-3.3a2.64 2.64 0 0 0-.28-.37c-.55-.6-1.36-.91-2.42-.91H18v9h2.3V17.9zm1.96-3.84c.22.22.33.5.33.87 0 .36-.1.65-.29.87-.2.23-.59.35-1.15.35h-.86v-2.41h.87c.52 0 .89.1 1.1.32z"></path>
-					</g>
-					<!-- No badges. -->
-					<rect class="lh-gauge--pwa__component lh-gauge--pwa__na-line ${
-                        pwa === 0 ? "lh-gauge--pwa__visible" : "lh-gauge--pwa__invisible"
-                    }" fill="#FFFFFF" x="20" y="32" width="20" height="4" rx="2"></rect>
-					<!-- Just fast and reliable. -->
-					<g class="lh-gauge--pwa__component lh-gauge--pwa__fast-reliable-badge ${
-                        pwa === 1 ? "lh-gauge--pwa__visible" : "lh-gauge--pwa__invisible"
-                    }" transform="translate(20, 29)">
-						<path fill="url(#lh-gauge--pwa__fast-reliable__shadow-gradient-0)" d="M33.63 19.49A30 30 0 0 1 16.2 30.36L3 17.14 17.14 3l16.49 16.49z"></path>
-						<use href="#lh-gauge--pwa__fast-reliable-badge-0"></use>
-					</g>
-					<!-- Just installable. -->
-					<g class="lh-gauge--pwa__component lh-gauge--pwa__installable-badge ${
-                        pwa === 2 ? "lh-gauge--pwa__visible" : "lh-gauge--pwa__invisible"
-                    }" transform="translate(20, 29)">
-						<path fill="url(#lh-gauge--pwa__installable__shadow-gradient-0)" d="M33.629 19.487c-4.272 5.453-10.391 9.39-17.415 10.869L3 17.142 17.142 3 33.63 19.487z"></path>
-						<use href="#lh-gauge--pwa__installable-badge-0"></use>
-					</g>
-					<!-- Fast and reliable and installable. -->
-					<g class="lh-gauge--pwa__component lh-gauge--pwa__fast-reliable-installable-badges ${
-                        pwa === 3 ? "lh-gauge--pwa__visible" : "lh-gauge--pwa__invisible"
-                    }">
-						<g transform="translate(8, 29)">						<!-- fast and reliable -->
-							<path fill="url(#lh-gauge--pwa__fast-reliable__shadow-gradient-0)" d="M16.321 30.463L3 17.143 17.142 3l22.365 22.365A29.864 29.864 0 0 1 22 31c-1.942 0-3.84-.184-5.679-.537z"></path>
-							<use href="#lh-gauge--pwa__fast-reliable-badge-0"></use>
-						</g>
-						<g transform="translate(32, 29)">						<!-- installable -->
-							<path fill="url(#lh-gauge--pwa__installable__shadow-gradient-0)" d="M25.982 11.84a30.107 30.107 0 0 1-13.08 15.203L3 17.143 17.142 3l8.84 8.84z"></path>
-							<use href="#lh-gauge--pwa__installable-badge-0"></use>
-						</g>
-					</g>
-					<!-- Full PWA. -->
-					<g class="lh-gauge--pwa__component lh-gauge--pwa__check-circle ${
-                        pwa === 7 ? "lh-gauge--pwa__visible" : "lh-gauge--pwa__invisible"
-                    }" transform="translate(18, 28)">
-						<circle fill="#FFFFFF" cx="12" cy="12" r="12"></circle>
-						<path fill="url(#lh-gauge--pwa__check-circle__gradient-0)" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
-					</g>
-				</g>
-			</svg>
-			<text class="guage-title" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">
-				<tspan x="100px" dy="-6px">Progressive</tspan>
-				<tspan x="100px" dy="30px">Web App</tspan>
-			</text>
-		</svg>
+		${Object.keys(scores).map((score, i) => getGuageSVG(score, scores[score], offset + i * 200))}
 		<svg width="604" height="76" x="200" y="250">
 			<g>
 				<rect fill="none" id="canvas_background" height="80" width="604" y="-1" x="-1"/>
