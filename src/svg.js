@@ -117,23 +117,30 @@ const lableMaps = {
     "seo": "SEO",
 };
 
-const getGuageSVG = (indicator, score, offset) => {
-    switch (indicator) {
+const getGuageSVG = (category, score, offset) => {
+    switch (category) {
         case "pwa":
             return getPWAGuage(score, offset);
         case "performance":
         case "accessibility":
         case "best-practices":
         case "seo":
-            return getSimpleGuage(lableMaps[indicator], score, offset);
+            return getSimpleGuage(lableMaps[category], score, offset);
         default:
             return "NA";
     }
 };
 
 // TODO: order of svgs
-const buildSVG = ({ theme, scores }) => {
-    let offset = 500 - Object.keys(scores).length * 100;
+
+/**
+ *
+ * @param {String} theme theme
+ * @param {Array.<{category: String, score: Number}>} scores
+ * @returns
+ */
+const buildSVG = (theme, scores) => {
+    let offset = 500 - scores.length * 100;
 
     const svg = `
 	<svg class="theme--${theme}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" width="1000" height="330">
@@ -256,7 +263,7 @@ const buildSVG = ({ theme, scores }) => {
 				stroke: #f5f5f566
 			}
 		</style>
-		${Object.keys(scores).map((score, i) => getGuageSVG(score, scores[score], offset + i * 200))}
+		${scores.map(({ category, score }, i) => getGuageSVG(category, score, offset + i * 200))}
 		<svg width="604" height="76" x="200" y="250">
 			<g>
 				<rect fill="none" id="canvas_background" height="80" width="604" y="-1" x="-1"/>

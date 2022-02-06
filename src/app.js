@@ -41,7 +41,10 @@ app.get("/", async (req, res) => {
 
     const scores = await runTests(SITE_URL, categories, strategy);
 
-    const svg = buildSVG({ theme, scores });
+    const svg = buildSVG(
+        theme,
+        categories.map((category) => ({ category, score: scores[category] }))
+    );
 
     res.setHeader("Content-Type", "image/svg+xml");
     res.send(svg);
