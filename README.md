@@ -54,46 +54,42 @@ https://pagespeed-insights.herokuapp.com?url=your_website_url&theme=dark
 ```
 
 ### Strategy
-Strategy specifies the type of device your website is audited for. You can specify strategy as either `mobile` or `desktop`. If none is specified `desktop` is chosen
+Strategy specifies the type of device your website is audited for. You can specify `strategy` as either `mobile` or `desktop`. If none is specified `desktop` is chosen
 ```md
 https://pagespeed-insights.herokuapp.com?url=your_website_url&strategy=mobile
 ```
 
 ### Category
 There are 5 categories (in order)
-- Performance
-- Accessibility
-- Best Practices
-- SEO
-- Progressive Web App
+| Category Name | param |
+|-------------|---------------|
+| Performance | `performance` |
+| Accessibility | `accessibility` |
+| Best Practices | `best-practices` |
+| SEO | `seo` |
+| Progressive Web App | `pwa` |
 
-By default all the categories are evaluated, but you can specify which categories to evaluate. The category parameter is a number. This is 5-bit number in binary, where if a bit is 1 then the corresponding category will be included.
-For example 
-```
-+------------+------------+------------+------------+------------+
-|   Perf.    |    Acc.    |  Best pr.  |     SEO    |     PWA    |
-+------------+------------+------------+------------+------------+
-|      1     |      0     |      1     |      1     |      1     | => 0x10111 => 23
-+------------+------------+------------+------------+------------+
-```
+If not specified, all the categories are evaluated. But you can specify only categories which you want to evaluate. The `category` parameter is comma-separated category indicators.
+
+Examples:
 
 #### Only performance
 ```md
-https://pagespeed-insights.herokuapp.com?url=your_website_url&categories=16
+https://pagespeed-insights.herokuapp.com?url=your_website_url&categories=performance
 ```
 
 #### All but PWA
 ```md
-https://pagespeed-insights.herokuapp.com?url=your_website_url&categories=30
+https://pagespeed-insights.herokuapp.com?url=your_website_url&categories=performance,accessibility,best-practices,seo
 ```
 
-
+<!-- 
 ### Accuracy
 
 Performance is volatile so you can request up to 3 performance tests to retrieve more precise results
 ```md
 https://pagespeed-insights.herokuapp.com?url=your_website_url&tests=30
-```
+``` -->
 
 ### Embedding into readme
 After downloading svg you can embed into readme as following
