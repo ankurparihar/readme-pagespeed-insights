@@ -10,9 +10,15 @@ const guageClass = (score) => {
 };
 
 // TODO: order of svgs
-const buildSVG = ({ theme, scores, offsets }) => {
+const buildSVG = ({ theme, scores }) => {
     const { performance, accessibility, "best-practices": best_practices, seo, pwa } = scores;
-    const [offset1, offset2, offset3, offset4, offset5] = offsets;
+
+    const offset1 = 500 - Object.keys(scores).length * 100;
+    const offset2 = offset1 + (performance !== undefined ? 200 : 0);
+    const offset3 = offset2 + (accessibility !== undefined ? 200 : 0);
+    const offset4 = offset3 + (best_practices !== undefined ? 200 : 0);
+    const offset5 = offset4 + (seo !== undefined ? 200 : 0);
+
     const svg = `
 	<svg class="theme--${theme}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" width="1000" height="330">
 		<style>
