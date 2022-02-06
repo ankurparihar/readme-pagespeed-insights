@@ -13,7 +13,7 @@
         "prettier": "^2.5.1"
     },
     "scripts": {
-        "start": "node app.js",
+        "start": "node src/app.js",
         "format": "prettier --write \"**/*.js\"",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
