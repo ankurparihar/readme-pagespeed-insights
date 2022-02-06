@@ -9,8 +9,9 @@ const guageClass = (score) => {
     return "guage-undefined";
 };
 
-const buildSVG = ({ theme, categories, scores, offsets }) => {
-    const { performance, accessibility, best_practices, seo, pwa } = scores;
+// TODO: order of svgs
+const buildSVG = ({ theme, scores, offsets }) => {
+    const { performance, accessibility, "best-practices": best_practices, seo, pwa } = scores;
     const [offset1, offset2, offset3, offset4, offset5] = offsets;
     const svg = `
 	<svg class="theme--${theme}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" width="1000" height="330">
@@ -134,7 +135,7 @@ const buildSVG = ({ theme, categories, scores, offsets }) => {
 			}
 		</style>
 		<svg class="guage-div guage-perf ${
-            (categories & 16) === 16 ? guageClass(performance) : "guage-invisible"
+            scores["performance"] !== undefined ? guageClass(performance) : "guage-invisible"
         }" viewBox="0 0 200 200" width="200" height="200" x="${offset1}" y="0">
 			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
 			<circle class="gauge-arc guage-arc-1" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${
@@ -146,7 +147,7 @@ const buildSVG = ({ theme, categories, scores, offsets }) => {
 			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Performance</text>
 		</svg>
 		<svg class="guage-div guage-acc ${
-            (categories & 8) === 8 ? guageClass(accessibility) : "guage-invisible"
+            scores["accessibility"] !== undefined ? guageClass(accessibility) : "guage-invisible"
         }" viewBox="0 0 200 200" width="200" height="200" x="${offset2}" y="0">
 			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
 			<circle class="gauge-arc guage-arc-2" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${
@@ -158,7 +159,7 @@ const buildSVG = ({ theme, categories, scores, offsets }) => {
 			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Accessibility</text>
 		</svg>
 		<svg class="guage-div guage-best ${
-            (categories & 4) === 4 ? guageClass(best_practices) : "guage-invisible"
+            scores["best-practices"] !== undefined ? guageClass(best_practices) : "guage-invisible"
         }" viewBox="0 0 200 200" width="200" height="200" x="${offset3}" y="0">
 			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
 			<circle class="gauge-arc guage-arc-3" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${
@@ -170,7 +171,7 @@ const buildSVG = ({ theme, categories, scores, offsets }) => {
 			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">Best Practices</text>
 		</svg>
 		<svg class="guage-div guage-seo ${
-            (categories & 2) === 2 ? guageClass(seo) : "guage-invisible"
+            scores["seo"] !== undefined ? guageClass(seo) : "guage-invisible"
         }" viewBox="0 0 200 200" width="200" height="200" x="${offset4}" y="0">
 			<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
 			<circle class="gauge-arc guage-arc-4" r="56" cx="100" cy="60" stroke-width="8" style="stroke-dasharray: ${
@@ -182,7 +183,7 @@ const buildSVG = ({ theme, categories, scores, offsets }) => {
 			<text class="guage-title" x="100px" y="160px" alignment-baseline="central" dominant-baseline="central" text-anchor="middle">SEO</text>
 		</svg>
 		<svg class="guage-div guage-pwa ${
-            (categories & 1) === 1 ? "" : "guage-invisible"
+            scores["pwa"] !== undefined ? "" : "guage-invisible"
         }" viewBox="0 0 200 200" width="200" height="200" x="${offset5}" y="0">
 			<svg viewBox="0 0 60 60" width="112" height="112" x="44" y="4">
 				<defs>
