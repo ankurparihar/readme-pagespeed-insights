@@ -6,6 +6,7 @@ const app = express();
 const buildSVG = require("./svg");
 const runTests = require("./psi-runner");
 const port = process.env.PORT || 3000;
+const MAX_PERF_TEST_COUNT = 3;
 
 app.listen(port, () => {
     console.log(`lighthouse-stats-app listening at PORT ${port}`);
@@ -26,6 +27,9 @@ app.get("/", async (req, res) => {
         return;
     } else if (perfCount <= 0) {
         res.status(400).send("perfCount param should be > 0");
+        return;
+    } else if (perfCount > MAX_PERF_TEST_COUNT) {
+        res.status(400).send(`perfCount cannot exceed ${MAX_PERF_TEST_COUNT}`);
         return;
     }
 
