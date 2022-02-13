@@ -71,8 +71,6 @@ There are 5 categories (in order)
 
 If not specified, all the categories are evaluated. But you can specify only categories which you want to evaluate. The `category` parameter is comma-separated category indicators.
 
-Ordering of categories is respected.
-
 Examples:
 
 #### Only performance
@@ -86,6 +84,9 @@ https://pagespeed-insights.herokuapp.com?url=your_website_url&categories=perform
 ```
 
 #### Ordering
+
+Order of categories is preserved
+
 ```md
 https://pagespeed-insights.herokuapp.com?url=your_website_url&categories=seo,performance,accessibility
 ```
