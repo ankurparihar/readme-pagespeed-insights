@@ -91,6 +91,12 @@ Order of categories is preserved
 https://pagespeed-insights.herokuapp.com?url=your_website_url&categories=seo,performance,accessibility
 ```
 
+### Options
+Additional options you can specify in query parameter
+| Name (default) | Description |
+|------|-------------|
+| `perfTestCount (1)` | Specify how many times __performance__ test to run |
+
 <!-- 
 ### Accuracy
 
