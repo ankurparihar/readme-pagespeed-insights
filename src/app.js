@@ -17,6 +17,9 @@ const {
 } = require("./constants");
 const port = process.env.PORT || 3000;
 
+let test = 123;
+test = "ankur";
+
 app.listen(port, () => {
     console.log(`lighthouse-stats-app listening at PORT ${port}`);
 });
