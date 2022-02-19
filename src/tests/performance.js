@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const { PAGESPEED_API_URL, API_KEY } = require("../constants");
+const { PAGESPEED_API_URL, API_KEY, CAT_PERF } = require("../constants");
 
 /**
  * Performance test which requires multiple iterations to get better results
@@ -7,7 +7,7 @@ const { PAGESPEED_API_URL, API_KEY } = require("../constants");
  * @returns score
  */
 const perfTest = async ({ url, strategy, iterations = 1 }) => {
-    const category = "performance";
+    const category = CAT_PERF;
     const queryURL = `${PAGESPEED_API_URL}?url=${url}&strategy=${strategy}&category=${category}&key=${API_KEY}`;
     try {
         const responses = await Promise.all(new Array(iterations).fill(0).map(() => fetch(queryURL)));

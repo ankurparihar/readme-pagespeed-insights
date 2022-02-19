@@ -1,3 +1,5 @@
+const { CAT_PERF, CAT_PWA, CAT_A11Y, CAT_BEST, CAT_SEO, THEME_AGNOSTIC } = require("./constants");
+
 const guageClass = (score) => {
     if (score >= 90) {
         return "guage-green";
@@ -119,15 +121,15 @@ const lableMaps = {
 
 const getGuageSVG = (category, score, offset) => {
     switch (category) {
-        case "pwa":
+        case CAT_PWA:
             return getPWAGuage(score, offset);
-        case "performance":
-        case "accessibility":
-        case "best-practices":
-        case "seo":
+        case CAT_PERF:
+        case CAT_A11Y:
+        case CAT_BEST:
+        case CAT_SEO:
             return getSimpleGuage(lableMaps[category], score, offset);
         default:
-            return "NA";
+            return getSimpleGuage("NA", 0, offset);
     }
 };
 
@@ -139,7 +141,7 @@ const getGuageSVG = (category, score, offset) => {
  * @param {Array.<{category: String, score: Number}>} scores
  * @returns
  */
-const buildSVG = (theme, scores) => {
+const buildSVG = (theme = THEME_AGNOSTIC, scores) => {
     let offset = 500 - scores.length * 100;
 
     const svg = `

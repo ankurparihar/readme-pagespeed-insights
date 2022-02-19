@@ -5,8 +5,17 @@ const url = require("url");
 const app = express();
 const buildSVG = require("./svg");
 const runTests = require("./psi-runner");
+const {
+    MAX_PERF_TEST_COUNT,
+    STRATEGY_DESKTOP,
+    THEME_AGNOSTIC,
+    CAT_PERF,
+    CAT_BEST,
+    CAT_A11Y,
+    CAT_SEO,
+    CAT_PWA,
+} = require("./constants");
 const port = process.env.PORT || 3000;
-const MAX_PERF_TEST_COUNT = 3;
 
 app.listen(port, () => {
     console.log(`lighthouse-stats-app listening at PORT ${port}`);
@@ -14,7 +23,7 @@ app.listen(port, () => {
 
 app.get("/", async (req, res) => {
     const queryObject = url.parse(req.url, true).query;
-    const { url: SITE_URL, strategy = "desktop", theme = "agnostic", perfTestCount = 1 } = queryObject;
+    const { url: SITE_URL, strategy = STRATEGY_DESKTOP, theme = THEME_AGNOSTIC, perfTestCount = 1 } = queryObject;
     const perfCount = parseInt(perfTestCount);
 
     if (!SITE_URL) {
@@ -33,7 +42,7 @@ app.get("/", async (req, res) => {
         return;
     }
 
-    const defaultCategories = ["performance", "accessibility", "best-practices", "seo", "pwa"];
+    const defaultCategories = [CAT_PERF, CAT_A11Y, CAT_BEST, CAT_SEO, CAT_PWA];
     let categories = defaultCategories;
 
     if (queryObject.categories) {

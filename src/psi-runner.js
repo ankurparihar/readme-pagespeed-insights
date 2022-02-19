@@ -1,3 +1,4 @@
+const { CAT_PERF, CAT_PWA } = require("./constants");
 const perfTest = require("./tests/performance");
 const pwaTest = require("./tests/pwa");
 const simpleTest = require("./tests/simple");
@@ -16,9 +17,9 @@ const runTests = async (url, categories, strategy, options) => {
     await Promise.all(
         categories.map((category) => {
             switch (category) {
-                case "pwa":
+                case CAT_PWA:
                     return pwaTest({ url, strategy });
-                case "performance":
+                case CAT_PERF:
                     return perfTest({ url, strategy, iterations: options[category].iterations });
                 default:
                     return simpleTest({ url, category, strategy });

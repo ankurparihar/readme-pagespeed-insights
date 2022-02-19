@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const { PAGESPEED_API_URL, API_KEY } = require("../constants");
+const { PAGESPEED_API_URL, API_KEY, CAT_PWA } = require("../constants");
 
 /**
  * Test to get PWA score
@@ -9,7 +9,7 @@ const { PAGESPEED_API_URL, API_KEY } = require("../constants");
 const pwaTest = async ({ url, strategy }) => {
     try {
         const response = await fetch(
-            `${PAGESPEED_API_URL}?url=${url}&strategy=${strategy}&category=pwa&key=${API_KEY}`
+            `${PAGESPEED_API_URL}?url=${url}&strategy=${strategy}&category=${CAT_PWA}&key=${API_KEY}`
         );
         const json = await response.json();
         const { lighthouseResult } = json;
