@@ -1,6 +1,6 @@
-const { CAT_PERF, CAT_PWA, CAT_A11Y, CAT_BEST, CAT_SEO, THEME_AGNOSTIC } = require("./constants");
+import constants from "./constants";
 
-const guageClass = (score) => {
+const guageClass = (score: number) => {
     if (score >= 90) {
         return "guage-green";
     } else if (score >= 50) {
@@ -11,7 +11,7 @@ const guageClass = (score) => {
     return "guage-undefined";
 };
 
-const getSimpleGuage = (label, score, offset) => {
+const getSimpleGuage = (label: string, score: number, offset: any) => {
     return `<svg class="guage-div guage-perf ${guageClass(score)}"
 				viewBox="0 0 200 200" width="200" height="200" x="${offset}" y="0">
 		<circle class="gauge-base" r="56" cx="100" cy="60" stroke-width="8"></circle>
@@ -25,7 +25,7 @@ const getSimpleGuage = (label, score, offset) => {
 	</svg>`;
 };
 
-const getPWAGuage = (score, offset) => {
+const getPWAGuage = (score: number, offset: any) => {
     return `<svg class="guage-div guage-pwa" viewBox="0 0 200 200" width="200" height="200" x="${offset}" y="0">
 		<svg viewBox="0 0 60 60" width="112" height="112" x="44" y="4">
 			<defs>
@@ -119,30 +119,26 @@ const lableMaps = {
     "seo": "SEO",
 };
 
-const getGuageSVG = (category, score, offset) => {
+const getGuageSVG = (category: string, score: number, offset: number) => {
     switch (category) {
-        case CAT_PWA:
+        case constants.CAT_PWA:
             return getPWAGuage(score, offset);
-        case CAT_PERF:
-        case CAT_A11Y:
-        case CAT_BEST:
-        case CAT_SEO:
+        case constants.CAT_PERF:
+        case constants.CAT_A11Y:
+        case constants.CAT_BEST:
+        case constants.CAT_SEO:
             return getSimpleGuage(lableMaps[category], score, offset);
         default:
             return getSimpleGuage("NA", 0, offset);
     }
 };
 
-// TODO: order of svgs
-
 /**
- *
- * @param {String} theme theme
- * @param {Array.<{category: String, score: Number}>} scores
+ * Build thematic SVG from given scores
  * @returns
  */
-const buildSVG = (theme = THEME_AGNOSTIC, scores) => {
-    let offset = 500 - scores.length * 100;
+const buildSVG = (theme: string = constants.THEME_AGNOSTIC, scores: { category: string; score: number }[]) => {
+    const offset = 500 - scores.length * 100;
 
     const svg = `
 	<svg class="theme--${theme}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" width="1000" height="330">
@@ -287,4 +283,4 @@ const buildSVG = (theme = THEME_AGNOSTIC, scores) => {
     return svg;
 };
 
-module.exports = buildSVG;
+export default buildSVG;
