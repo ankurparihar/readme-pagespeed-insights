@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+
 import constants from "../constants";
 
 const { PAGESPEED_API_URL, API_KEY, CAT_PERF } = constants;
