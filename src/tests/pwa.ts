@@ -1,12 +1,13 @@
-const fetch = require("node-fetch");
-const { PAGESPEED_API_URL, API_KEY, CAT_PWA } = require("../constants");
+import fetch from "node-fetch";
+import constants from "../constants";
+
+const { PAGESPEED_API_URL, API_KEY, CAT_PWA } = constants;
 
 /**
  * Test to get PWA score
- * @param {{url: String, strategy: String}} param0
  * @returns score
  */
-const pwaTest = async ({ url, strategy }) => {
+const pwaTest = async (url: string, strategy: string) => {
     try {
         const response = await fetch(
             `${PAGESPEED_API_URL}?url=${url}&strategy=${strategy}&category=${CAT_PWA}&key=${API_KEY}`
@@ -20,7 +21,7 @@ const pwaTest = async ({ url, strategy }) => {
         let optimized = 0;
         let optimized_total = 0;
         lighthouseResult.categories.pwa.auditRefs.forEach((auditRef) => {
-            var audit = lighthouseResult.audits[auditRef.id];
+            const audit = lighthouseResult.audits[auditRef.id];
             if (audit.scoreDisplayMode === "binary" || audit.scoreDisplayMode === "numeric") {
                 if (auditRef.group === "pwa-fast-reliable") {
                     fast_reliable_total++;
@@ -50,4 +51,4 @@ const pwaTest = async ({ url, strategy }) => {
     }
 };
 
-module.exports = pwaTest;
+export default pwaTest;

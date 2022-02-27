@@ -1,12 +1,13 @@
-const fetch = require("node-fetch");
-const { PAGESPEED_API_URL, API_KEY } = require("../constants");
+import fetch from "node-fetch";
+import constants from "../constants";
+
+const { PAGESPEED_API_URL, API_KEY } = constants;
 
 /**
  * Basic test which requires single API call
- * @param {{url: String, category: String, strategy: String }} param0
  * @returns score
  */
-const simpleTest = async ({ url, category, strategy }) => {
+const simpleTest = async (url: string, category: string, strategy: string) => {
     const queryURL = `${PAGESPEED_API_URL}?url=${url}&strategy=${strategy}&category=${category}&key=${API_KEY}`;
     try {
         const response = await fetch(queryURL);
@@ -18,4 +19,4 @@ const simpleTest = async ({ url, category, strategy }) => {
     }
 };
 
-module.exports = simpleTest;
+export default simpleTest;
