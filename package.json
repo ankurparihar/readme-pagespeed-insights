@@ -1,6 +1,6 @@
 {
     "name": "readme-pagespeed-insights",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "GitHub README compatible PageSpeed Insights of your website",
     "main": "app.js",
     "dependencies": {
@@ -16,13 +16,16 @@
         "@typescript-eslint/eslint-plugin": "^5.12.1",
         "@typescript-eslint/parser": "^5.12.1",
         "eslint": "^8.9.0",
+        "eslint-import-resolver-typescript": "^2.5.0",
+        "eslint-plugin-import": "^2.25.4",
         "prettier": "^2.5.1",
         "typescript": "^4.5.5"
     },
     "scripts": {
         "build": "tsc",
         "start": "node dist/app.js",
-        "format": "prettier --write \"**/*.js\"",
+        "format": "prettier --write \"**/*.{js,ts}\"",
+        "lint": "eslint --ext .ts --ignore-path .gitignore .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Ankur Parihar",

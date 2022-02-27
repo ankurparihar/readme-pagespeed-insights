@@ -1,15 +1,15 @@
 import "dotenv/config";
 
-import express from "express";
 import { parse as parseURL } from "url";
-import buildSVG from "./svg";
-import runTests from "./psi-runner";
+
+import express from "express";
 
 import constants from "./constants";
+import { urlOptions } from "./interfaces/options";
+import runTests from "./psi-runner";
+import buildSVG from "./svg";
 import { getSingleQueryParam } from "./utils/url";
 import { removeDuplicates } from "./utils/utils";
-
-import { urlOptions } from "./interfaces/options";
 
 const app = express();
 const port = process.env.PORT || 3000;

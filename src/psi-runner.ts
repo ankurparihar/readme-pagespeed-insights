@@ -1,5 +1,4 @@
 import constants from "./constants";
-
 import { perfTest, pwaTest, simpleTest } from "./tests";
 
 /**
