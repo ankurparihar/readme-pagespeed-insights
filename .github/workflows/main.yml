@@ -15,4 +15,4 @@ jobs:
                   ref: master
 
             - name: Push to Heroku
-              run: git push https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/pagespeed-insights.git master
+              run: git push -f https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/pagespeed-insights.git master
