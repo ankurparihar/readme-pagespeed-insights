@@ -1,0 +1,24 @@
+name: Deploy to Heroku
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            # - name: Install Heroku CLI
+            #   uses: sudo snap install --classic heroku
+
+            - name: Add Heroku remote
+              run: git push https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/pagespeed-insights.git origin/master:master
+
+            # - name: Push to Heroku
+            #   env:
+            #       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+            #   run: git push heroku master
