@@ -17,4 +17,4 @@ jobs:
             - name: Push to Heroku
               run: |
                   git fetch origin master --unshallow
-                  git push -f https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/pagespeed-insights.git master
+                  git push https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/pagespeed-insights.git master
