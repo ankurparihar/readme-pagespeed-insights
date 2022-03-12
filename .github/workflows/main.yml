@@ -16,7 +16,7 @@ jobs:
             #   uses: sudo snap install --classic heroku
 
             - name: Add Heroku remote
-              run: git push https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/pagespeed-insights.git origin/master:master
+              run: git push https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/pagespeed-insights.git origin/master:test
 
             # - name: Push to Heroku
             #   env:
