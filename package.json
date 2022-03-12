@@ -2,7 +2,7 @@
     "name": "readme-pagespeed-insights",
     "version": "1.0.2",
     "description": "GitHub README compatible PageSpeed Insights of your website",
-    "main": "app.js",
+    "main": "dist/app.js",
     "dependencies": {
         "dotenv": "^10.0.0",
         "express": "^4.17.1",
