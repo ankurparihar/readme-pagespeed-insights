@@ -1,9 +1,7 @@
 name: Deploy to Heroku
 
 on:
-    push:
-        branches:
-            - master
+    pull_request:
 
 jobs:
     deploy:
