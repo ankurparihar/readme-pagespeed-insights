@@ -1,0 +1,18 @@
+name: Deploy to Heroku
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout master
+              uses: actions/checkout@v2
+              with:
+                  ref: master
+
+            - name: Push to Heroku
+              run: git push https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/pagespeed-insights.git master
